@@ -14,10 +14,28 @@
 
 \author{Ettore Farinelli \\ ettore.fainelli@studio.unibo.it \\ 0001019995}
 
+\date{\today}
+
 \begin{document}
 
 \maketitle
 
 \tableofcontents
+
+\chapter{Analisi dei requisiti}
+Si pone l'obbiettivo di realizzare un database capace di gestire un organizzazione di arti marziali come può essere, 
+per esempio, \textsc{L'Ultimate Fighting Championship, (UFC)}. La base di dati dovrà quindi essere capace di registrare 
+nuovi lottatori e in caso rimuoverli(squalifica, infortuneo, ritiro). Inoltre si potrà realizzare un evento, dove 
+i combattenti si scontreranno aggiornando (dopo gli scontri), gli score dei partecipanti e in caso le classifiche.
+
+\section{Intervista}
+A seguito di una prima intervista si sono ottenute le seguenti richieste:\medskip
+
+Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, team, data di nascita, peso e arte 
+marziale in cui vuole lottare (più possibilità disponibili). Alla iscrizione di un nuovo lottatore esso verrà inserito in fondo 
+alla classifica della propria categoria, e dovrà effettuare almeno un combattimento all'anno, oppure verrà automaticamente 
+squalificato dalla lega. Saranno presenti diverse classifiche per ogni tipo di categoria dove i lottatori saranno ordinati 
+in base ai loro record (V, S, P), dove le vittorie assegnano 3 punti, i pareggi 1 e le sconfitte 0.
+
 
 \end{document}
