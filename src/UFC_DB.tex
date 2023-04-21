@@ -25,17 +25,26 @@
 \chapter{Analisi dei requisiti}
 Si pone l'obbiettivo di realizzare un database capace di gestire un organizzazione di arti marziali come può essere, 
 per esempio, \textsc{L'Ultimate Fighting Championship, (UFC)}. La base di dati dovrà quindi essere capace di registrare 
-nuovi lottatori e in caso rimuoverli(squalifica, infortuneo, ritiro). Inoltre si potrà realizzare un evento, dove 
+nuovi lottatori e in caso rimuoverli(squalifica, infortuneo, ritiro). Inoltre sarà possibile registrare eventi, dove 
 i combattenti si scontreranno aggiornando (dopo gli scontri), gli score dei partecipanti e in caso le classifiche.
 
 \section{Intervista}
 A seguito di una prima intervista si sono ottenute le seguenti richieste:\medskip
 
 Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, team, data di nascita, peso e arte 
-marziale in cui vuole lottare (più possibilità disponibili). Alla iscrizione di un nuovo lottatore esso verrà inserito in fondo 
-alla classifica della propria categoria, e dovrà effettuare almeno un combattimento all'anno, oppure verrà automaticamente 
+marziale in cui vuole lottare (più possibilità disponibili). Alla iscrizione di un nuovo lottatore esso verrà inserito all'ultimo 
+posto nella classifica della propria categoria, e dovrà effettuare almeno un combattimento all'anno, oppure verrà automaticamente 
 squalificato dalla lega. Saranno presenti diverse classifiche per ogni tipo di categoria dove i lottatori saranno ordinati 
-in base ai loro record (V, S, P), dove le vittorie assegnano 3 punti, i pareggi 1 e le sconfitte 0.
-
+in base ai loro record (V, S, P), dove le vittorie assegnano 3 punti, i pareggi 1 e le sconfitte 0.\par
+Le categorie in cui verranno suddivisi i membri della lega sono: \textit{Peso Piuma} (fino a 65kg), \textit{Welterweight} 
+(65kg - 77kg), \textit{Peso Medio} (77kg - 84kg) e \textit{Pesi Massimi} (da 84kg in poi). Inoltre ci sarà una divisione in 
+arti marziali: \textit{MMA} (Mixed Martial Arts), \textit{BJJ} (Brazial Jiu Jitsu) e infine \textit{Muay Thai}. Per ogni 
+partecipante dovranno essere inserite le discipline di competenza possibilmente modificabili in futuro (sarà gestito in maniera 
+analoga il peso). Inoltre, partecipanti appartenenti a una determinata caegoria potranno scontrarsi solo con altri membri 
+della stessa. Gli eventi saranno constituiti da 3 combattimenti ciascuno, bisognerà tener traccia del: nome dello stadio, 
+luogo (indirizzo), costo noleggio stadio, costo staff, data, orario inizio, orario fine, biglietti standard venduti, biglietti 
+premium venduti, introiti netti. Ogni lottatore riceverà un pagamento extra e verrà calcolata una quantità di guadagni tramite 
+pubblicità, tutto in base al numero di biglietti venduti per l'evento, così da poter calcolare gli introiti netti dell'evento, il 
+quale verrà aggiunto in una \textsc{History} dove si potranno visualizzare tutti gli eventi passati.
 
 \end{document}
