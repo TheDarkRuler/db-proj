@@ -25,22 +25,23 @@
 \chapter{Analisi dei requisiti}
 Si pone l'obbiettivo di realizzare un database capace di gestire un organizzazione di arti marziali come può essere, 
 per esempio, \textsc{L'Ultimate Fighting Championship, (UFC)}. La base di dati dovrà quindi essere capace di registrare 
-nuovi lottatori e in caso rimuoverli(squalifica, infortuneo, ritiro). Inoltre sarà possibile registrare eventi, dove 
-i combattenti si scontreranno aggiornando (dopo gli scontri), gli score dei partecipanti e in caso le classifiche.
+nuovi \textbf{lottatori} e in caso rimuoverli(squalifica, infortuneo, ritiro). Inoltre sarà possibile registrare \textbf{eventi}, 
+dove i combattenti si scontreranno aggiornando (dopo gli \textbf{scontri}), gli \textbf{score} dei partecipanti 
+e in caso le \textbf{classifiche}.
 
 \section{Intervista}
 A seguito di una prima intervista si sono ottenute le seguenti richieste:\medskip
 
-Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, team, data di nascita, peso e arte 
-marziale in cui vuole lottare (più possibilità disponibili). Alla iscrizione di un nuovo lottatore esso verrà inserito all'ultimo 
+Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, team, data di nascita, peso e \textbf{arte 
+marziale} in cui vuole lottare (più possibilità disponibili). Alla iscrizione di un nuovo lottatore esso verrà inserito all'ultimo 
 posto nella classifica della propria categoria, e dovrà effettuare almeno un combattimento all'anno, oppure verrà automaticamente 
 squalificato dalla lega. Saranno presenti diverse classifiche per ogni tipo di categoria dove i lottatori saranno ordinati 
-in base ai loro record (V, S, P), dove le vittorie assegnano 3 punti, i pareggi 1 e le sconfitte 0.\par
+in base ai loro \textbf{record} (V, P, S), dove le vittorie assegnano 3 punti, i pareggi 1 e le sconfitte 0.\par
 Le categorie in cui verranno suddivisi i membri della lega sono: \textit{Peso Piuma} (fino a 65kg), \textit{Welterweight} 
 (65kg - 77kg), \textit{Peso Medio} (77kg - 84kg) e \textit{Pesi Massimi} (da 84kg in poi). Inoltre ci sarà una divisione in 
 arti marziali: \textit{MMA} (Mixed Martial Arts), \textit{BJJ} (Brazial Jiu Jitsu) e infine \textit{Muay Thai}. Per ogni 
 partecipante dovranno essere inserite le discipline di competenza possibilmente modificabili in futuro (sarà gestito in maniera 
-analoga il peso). Inoltre, partecipanti appartenenti a una determinata caegoria potranno scontrarsi solo con altri membri 
+analoga il peso). Inoltre, partecipanti appartenenti a una determinata categoria potranno scontrarsi solo con altri membri 
 della stessa. Gli eventi saranno constituiti da 3 combattimenti ciascuno, bisognerà tener traccia del: nome dello stadio, 
 luogo (indirizzo), costo noleggio stadio, spesa staff, data, orario inizio, orario fine, biglietti standard venduti, biglietti 
 premium venduti, introiti netti. Ogni lottatore partecipante riceverà un pagamento extra e verrà calcolata una quantità di guadagni 
@@ -48,6 +49,24 @@ tramite pubblicità, tutto in base al numero di biglietti venduti per l'evento, 
 il quale verrà aggiunto in una \textsc{History} dove si potranno visualizzare tutti gli eventi passati, 
 avendo infine la possibilità di visualizzare i guadagni e le spese totali della lega.
 
-\section{Rilevamento delle ambiguità e soluzioni proposte}
+\section{Definizioni}
+\begin{itemize}
+    \item \textbf{Lottatore}: partecipante alla lega.
+    \item \textbf{Organizzatore}: amministratore che ha l'accesso al database e le autorizzazioni per gestirlo. 
+    \item \textbf{Evento}: un insieme di scontri avente un luogo e una data.
+    \item \textbf{Scontro}: un incontro tra due lottatori della stessa categoria.
+    \item \textbf{Classifica}: lista numerata in ordine dal partecipante migliore al peggiore in base ai record personali.
+    \item \textbf{Arte marziale}: disciplina frequentante da un partecipante.
+    \item \textbf{Record}: terna di vittorie, pareggi, sconfitte (V, P, S), ogni prtecipante ha la sua che definisce la sua posizione in 
+    classifica.
+\end{itemize}
 
+\subsection{Operazioni Amministratore}
+\begin{itemize}
+    \item Registrare un nuovo lottatore.
+    \item Rimuovere un lottatore.
+    \item Organizzare uno evento.
+    \item Visualizzare le classifiche.
+    \item Modificare i dati dei partecipanti.
+\end{itemize}
 \end{document}
