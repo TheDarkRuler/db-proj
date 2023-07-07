@@ -69,4 +69,23 @@ avendo infine la possibilità di visualizzare i guadagni e le spese totali della
     \item Visualizzare le classifiche.
     \item Modificare i dati dei partecipanti.
 \end{itemize}
+
+\chapter{Progettazione Concettuale}
+\section{Lottatore}
+I lottatori sono il cuore dell'intero database, per questo parte tutto dall'entità lottatore a cui sarà associato un'entità 
+record creata in modo tale da poter tener traccia dello score di ogni lottatore, inoltre un lottatore potrà partecipare a 
+uno scontro, in questo caso non sono riuscito a gestire il vincolo per il quale due lottatori di categorie diverse non possono 
+combattere.
+
+\section{Evento}
+Gli eventi sono il principale elemento della lega dal quale proviene il profitto di quest'ultima, quindi è importante 
+tenerne traccia con un entità "History" per poi realizzare a livello di frontend un grafico mostrante i guadagni generali.
+
+\section{Scontro}
+Gli scontri constituiscono gli eveti e sono formati da due lottatori della stessa categoria e che frequentano la stessa 
+disciplina, è importante anche che i due partecipanti a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
+
+\section{Schema concettuale finale}
+\includegraphics[scale=0.6, angle=90]{}
+
 \end{document}
