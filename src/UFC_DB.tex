@@ -86,6 +86,91 @@ Gli scontri constituiscono gli eveti e sono formati da due lottatori della stess
 disciplina, è importante anche che i due partecipanti a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
 
 \section{Schema concettuale finale}
-\includegraphics[scale=0.6, angle=90]{}
+\includegraphics[scale=0.8, angle=90]{./img/schema_finale.png}
+
+\chapter{Progettazione logica}
+\section{Stima del volume dei dati}
+\begin{itemize}
+    \item LOTTATORE: E, 250
+    \item RECORD: E, 250
+    \item BBJ: E, 125
+    \item MUAY\textunderscore THAI: E, 100
+    \item MMA: E, 150
+    \item PESO\textunderscore PIUMA: E, 60
+    \item WELTERWEIGHT: E, 70
+    \item PESO\textunderscore MEDIO: E, 60
+    \item PESI\textunderscore MASSIMI: E, 60
+    \item SCONTRO: E, 2000
+    \item EVENTO: E, 700
+    \item HISTORY: E, 700
+    \item DETIENE: A, 250
+    \item APPARTIENE: A, 250
+    \item PRATICA: A, 375
+    \item PARTECIPA: A, 4000
+    \item CONSTITUISCE: A, 2000
+    \item IMMAGAZINA: A, 700
+\end{itemize}
+
+\section{Descrizione delle operazioni principali e stima della loro frequenza}
+\begin{itemize}
+    \item Registrazione nuovo lottatore: 1/10 g
+    \item Rimuovere un lottatore: 1/15 g
+    \item Organizzare un evento: 1/30 g
+    \item Visualizzare la classifica: 3/ g
+    \item Modificare dati di un partecipante: 1/5 g
+\end{itemize} 
+
+\section{Schemi di navigazione e tabelle degli accessi}
+\subsection{Registrazione nuovo lottatore}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    LOTTATORE         & E         & 1       & W    \\ \hline
+    \textit{TOTALE}   &           & 2       &      \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Rimuovere un lottatore}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    LOTTATORE         & E         & 1       & W    \\ \hline
+    \textit{TOTALE}   &           & 2       &      \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Organizzare un evento}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    EVENTO            & E         & 1       & W    \\ \hline
+    SCONTRO           & E         & 3       & W    \\ \hline
+    HISTORY           & E         & 1       & W    \\ \hline
+    LOTTATORE         & E         & 6       & R    \\ \hline
+    PARTECIPA         & A         & 6       & R    \\ \hline
+    CONSTITUISCE      & A         & 3       & R    \\ \hline
+    IMMAGAZINA        & A         & 1       & R    \\ \hline
+    \textit{TOTALE}   &           & 26       &      \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Modificare dati di un partecipante}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    LOTTATORE         & E         & 1       & W    \\ \hline
+    RECORD            & E         & 1       & W    \\ \hline
+    DETIENE           & E         & 1       & W    \\ \hline
+    \textit{TOTALE}   &           & 6       &      \\ \hline
+    \end{tabular}
+\end{table}
 
 \end{document}
