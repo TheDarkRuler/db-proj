@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS fight_on;
 CREATE DATABASE fight_on;
 USE fight_on;
 
