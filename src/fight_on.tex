@@ -32,19 +32,21 @@ e in caso le \textbf{classifiche}.
 \section{Intervista}
 A seguito di una prima intervista si sono ottenute le seguenti richieste:\medskip
 
-Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, team, data di nascita, peso e \textbf{arte 
+Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, data di nascita, peso e \textbf{arte 
 marziale} in cui vuole lottare (più possibilità disponibili). Alla iscrizione di un nuovo lottatore esso verrà inserito all'ultimo 
-posto nella classifica della propria categoria, e dovrà effettuare almeno un combattimento all'anno, oppure verrà automaticamente 
-squalificato dalla lega. Saranno presenti diverse classifiche per ogni tipo di categoria dove i lottatori saranno ordinati 
+posto nella classifica della propria categoria, e dovrà effettuare almeno un combattimento all'anno, oppure verrà  
+squalificato dalla lega. Ci sarà la possibilità di registrare i \textbf{team} dei combattenti tenendo traccia di: nome, amministratore e 
+origine. Saranno presenti diverse classifiche per ogni tipo di categoria dove i lottatori saranno ordinati 
 in base ai loro \textbf{record} (V, P, S), dove le vittorie assegnano 3 punti, i pareggi 1 e le sconfitte 0.\par
-Le categorie in cui verranno suddivisi i membri della lega sono: \textit{Peso Piuma} (fino a 65kg), \textit{Welterweight} 
+Le categorie in cui verranno suddivisi i membri della lega sono: \textit{Peso Piuma} (fino a 65kg), \textit{} 
 (65kg - 77kg), \textit{Peso Medio} (77kg - 84kg) e \textit{Pesi Massimi} (da 84kg in poi). Inoltre ci sarà una divisione in 
 arti marziali: \textit{MMA} (Mixed Martial Arts), \textit{BJJ} (Brazial Jiu Jitsu) e infine \textit{Muay Thai}. Per ogni 
 partecipante dovranno essere inserite le discipline di competenza possibilmente modificabili in futuro (sarà gestito in maniera 
 analoga il peso). Inoltre, partecipanti appartenenti a una determinata categoria potranno scontrarsi solo con altri membri 
 della stessa. Gli eventi saranno constituiti da almeno 2 combattimenti ciascuno, bisognerà tener traccia del: nome dello stadio, 
 luogo (indirizzo), costo noleggio stadio, spesa staff, data, orario inizio, orario fine, biglietti standard venduti, biglietti 
-premium venduti, introiti netti. Ogni lottatore partecipante riceverà un pagamento extra e verrà calcolata una quantità di guadagni 
+premium venduti, introiti netti, inoltre sarà necessario poter associare a un evento degli sponsor selezionabili tra quelli disponibili 
+che hanno effettuato un contratto con la lega. Ogni lottatore partecipante riceverà un pagamento extra e verrà calcolata una quantità di guadagni 
 tramite pubblicità, tutto in base al numero di biglietti venduti per l'evento, così da poter calcolare gli introiti dell'evento, 
 il quale verrà aggiunto in una \textsc{History} dove si potranno visualizzare tutti gli eventi passati, 
 avendo infine la possibilità di visualizzare i guadagni e le spese totali della lega.
@@ -57,14 +59,18 @@ avendo infine la possibilità di visualizzare i guadagni e le spese totali della
     \item \textbf{Scontro}: un incontro tra due lottatori della stessa categoria.
     \item \textbf{Classifica}: lista numerata in ordine dal partecipante migliore al peggiore in base ai record personali.
     \item \textbf{Arte marziale}: disciplina frequentante da un partecipante.
+    \item \textbf{Team}: associazione a cui possono far parte 1 o piu combattenti, ha lo scopo di seguirli durante gli scontri e allenarli.
     \item \textbf{Record}: terna di vittorie, pareggi, sconfitte (V, P, S), ogni prtecipante ha la sua che definisce la sua posizione in 
-    classifica.
+        classifica.
 \end{itemize}
 
 \subsection{Operazioni Amministratore}
 \begin{itemize}
     \item Registrare un nuovo lottatore.
     \item Rimuovere un lottatore.
+    \item Registrare un nuovo team.
+    \item Rimuovere un team.
+    \item Aggiungere/Rimuovere uno sponsor.
     \item Organizzare uno evento.
     \item Visualizzare le classifiche.
     \item Modificare i dati dei partecipanti.
@@ -74,16 +80,17 @@ avendo infine la possibilità di visualizzare i guadagni e le spese totali della
 \section{Lottatore}
 I lottatori sono il cuore dell'intero database, per questo parte tutto dall'entità lottatore a cui sarà associato un'entità 
 record creata in modo tale da poter tener traccia dello score di ogni lottatore, inoltre un lottatore potrà partecipare a 
-uno scontro, in questo caso non sono riuscito a gestire il vincolo per il quale due lottatori di categorie diverse non possono 
-combattere.
+uno scontro, in questo caso non sono riuscito a gestire (a livello di schema concettuale) il vincolo per il quale due lottatori 
+di categorie diverse non possono combattere.
 
 \section{Evento}
 Gli eventi sono il principale elemento della lega dal quale proviene il profitto di quest'ultima, quindi è importante 
-tenerne traccia con un entità "History" per poi realizzare a livello di frontend un grafico mostrante i guadagni generali.
+tenerne traccia con un entità "Storico\textunderscore eventi" per poi realizzare a livello di frontend un grafico mostrante 
+i guadagni generali.
 
 \section{Scontro}
-Gli scontri constituiscono gli eveti e sono formati da due lottatori della stessa categoria e che frequentano la stessa 
-disciplina, è importante anche che i due partecipanti a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
+Gli scontri constituiscono gli eveti e sono formati da due lottatori della stessa categoria, è importante anche che i due partecipanti 
+a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
 
 \section{Schema concettuale finale}
 \includegraphics[scale=0.8, angle=90]{./img/schema_finale.png}
@@ -92,22 +99,26 @@ disciplina, è importante anche che i due partecipanti a uno scontro ricevano un
 \section{Stima del volume dei dati}
 \begin{itemize}
     \item LOTTATORE: E, 250
+    \item CATEGORIA: E, 4
+    \item DISCIPLINA: E, 3
     \item RECORD: E, 250
-    \item BBJ: E, 125
-    \item MUAY\textunderscore THAI: E, 100
-    \item MMA: E, 150
-    \item PESO\textunderscore PIUMA: E, 60
-    \item WELTERWEIGHT: E, 70
-    \item PESO\textunderscore MEDIO: E, 60
-    \item PESI\textunderscore MASSIMI: E, 60
+    \item CLASSIFICA: E, 250
     \item SCONTRO: E, 2000
+    \item STORICO\textunderscore SCONTRI
     \item EVENTO: E, 700
-    \item HISTORY: E, 700
+    \item STORICO\textunderscore EVENTI: E, 700
+    \item SPONSORIZZAZIONI: E, 15
+    \item TEAM: E, 150
     \item DETIENE: A, 250
+    \item CONSTITUISCE: A, 250
+    \item DIVISIONE\textunderscore CATEGORIA: A, 4
     \item APPARTIENE: A, 250
     \item PRATICA: A, 375
+    \item FA\textunderscore PARTE: A, 200
     \item PARTECIPA: A, 4000
+    \item PAGAMENTO: A, 4000
     \item CONSTITUISCE: A, 2000
+    \item CONTRIBUIZIONE: A, 3000
     \item IMMAGAZINA: A, 700
 \end{itemize}
 
@@ -115,6 +126,10 @@ disciplina, è importante anche che i due partecipanti a uno scontro ricevano un
 \begin{itemize}
     \item Registrazione nuovo lottatore: 1/10 g
     \item Rimuovere un lottatore: 1/15 g
+    \item Registrazione nuovo team: 1/12 g
+    \item Rimuovere un team: 1/18 g
+    \item Registrare un nuovo sponsor: 1/120 g
+    \item Rimuovere uno sponsor: 1/210 g
     \item Organizzare un evento: 1/30 g
     \item Visualizzare la classifica: 3/ g
     \item Modificare dati di un partecipante: 1/5 g
@@ -143,20 +158,47 @@ disciplina, è importante anche che i due partecipanti a uno scontro ricevano un
     \end{tabular}
 \end{table}
 
-\subsection{Organizzare un evento}
+\subsection{Registrazione/Rimozione nuovo team}
 \begin{table}[H]
     \paragraph{Tavola degli accessi\newline}
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto          & Costrutto & Accessi & Tipo \\ \hline
-    EVENTO            & E         & 1       & W    \\ \hline
-    SCONTRO           & E         & 3       & W    \\ \hline
-    HISTORY           & E         & 1       & W    \\ \hline
-    LOTTATORE         & E         & 6       & R    \\ \hline
-    PARTECIPA         & A         & 6       & R    \\ \hline
-    CONSTITUISCE      & A         & 3       & R    \\ \hline
-    IMMAGAZINA        & A         & 1       & R    \\ \hline
-    \textit{TOTALE}   &           & 26       &      \\ \hline
+    TEAM              & E         & 1       & W    \\ \hline
+    \textit{TOTALE}   &           & 2       &      \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Registrare/Rimuovere un nuovo sponsor}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    SPONSORIZZAZIONI  & E         & 1       & W    \\ \hline
+    \textit{TOTALE}   &           & 2       &      \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Organizzare un evento}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto                         & Costrutto & Accessi & Tipo \\ \hline
+    EVENTO                           & E         & 1       & W    \\ \hline
+    SCONTRO                          & E         & 3       & W    \\ \hline
+    SPONSORIZZAZIONI                 & E         & 1       & R    \\ \hline
+    STORICO\textunderscore SCONTRI   & E         & 3       & W    \\ \hline
+    STORICO\textunderscore EVENTI    & E         & 1       & W    \\ \hline
+    LOTTATORE                        & E         & 6       & R    \\ \hline
+    PARTECIPA                        & A         & 6       & R    \\ \hline
+    CONSTITUISCE                     & A         & 3       & R    \\ \hline
+    CONTRIBUIZIONE                   & A         & 1       & R    \\ \hline
+    IMMAGAZINA                       & A         & 1       & R    \\ \hline
+    STORICO\textunderscore SCONTRI   & A         & 3       & R    \\ \hline
+    PAGAMENTO                        & A         & 1       & R    \\ \hline
+    \textit{TOTALE}                  &           & 38      &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -165,11 +207,17 @@ disciplina, è importante anche che i due partecipanti a uno scontro ricevano un
     \paragraph{Tavola degli accessi\newline}
     \begin{tabular}{|c|c|c|c|}
     \hline
-    Concetto          & Costrutto & Accessi & Tipo \\ \hline
-    LOTTATORE         & E         & 1       & W    \\ \hline
-    RECORD            & E         & 1       & W    \\ \hline
-    DETIENE           & E         & 1       & W    \\ \hline
-    \textit{TOTALE}   &           & 6       &      \\ \hline
+    Concetto                         & Costrutto & Accessi & Tipo \\ \hline
+    LOTTATORE                        & E         & 1       & W    \\ \hline
+    RECORD                           & E         & 1       & W    \\ \hline
+    CATEGORIA                        & E         & 1       & W    \\ \hline
+    DISCIPLINA                       & E         & 1       & W    \\ \hline
+    TEAM                             & E         & 1       & W    \\ \hline
+    FA\textunderscore PARTE          & A         & 1       & R    \\ \hline
+    PRATICA                          & A         & 1       & R    \\ \hline
+    APPARTIENE                       & A         & 1       & R    \\ \hline
+    DETIENE                          & A         & 1       & R    \\ \hline
+    \textit{TOTALE}                  &           & 14      &      \\ \hline
     \end{tabular}
 \end{table}
 
