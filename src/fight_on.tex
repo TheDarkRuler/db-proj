@@ -78,15 +78,16 @@ avendo infine la possibilità di visualizzare i guadagni e le spese totali della
 
 \chapter{Progettazione Concettuale}
 \section{Lottatore}
-I lottatori sono il cuore dell'intero database, per questo parte tutto dall'entità lottatore a cui sarà associato un'entità 
-record creata in modo tale da poter tener traccia dello score di ogni lottatore, inoltre un lottatore potrà partecipare a 
-uno scontro, in questo caso non sono riuscito a gestire (a livello di schema concettuale) il vincolo per il quale due lottatori 
+I lottatori sono il cuore dell'intero database, per questo parte tutto dall'entità "lottatore" a cui sarà associata un'entità 
+"record" creata in modo tale da poter tener traccia dello score di ogni combattente, inoltre i lottatore potranno o meno far parte 
+di un team precedentemente registrato. Infine, ogni lottatore potrà partecipare a uno scontro per ogni evento, 
+in questo caso non sono riuscito a gestire (a livello di schema concettuale) il vincolo per il quale due lottatori 
 di categorie diverse non possono combattere.
 
 \section{Evento}
-Gli eventi sono il principale elemento della lega dal quale proviene il profitto di quest'ultima, quindi è importante 
+Gli eventi sono il principale elemento della lega dal quale proviene il profitto di quest'ultima. Quindi, è importante 
 tenerne traccia con un entità "Storico\textunderscore eventi" per poi realizzare a livello di frontend un grafico mostrante 
-i guadagni generali.
+i guadagni generali, inoltre ogni evento potrà essere sponsorizzato da uno o più sponsor registrati nella lega.
 
 \section{Scontro}
 Gli scontri constituiscono gli eveti e sono formati da due lottatori della stessa categoria, è importante anche che i due partecipanti 
@@ -98,19 +99,25 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
 \chapter{Progettazione logica}
 \section{Stima del volume dei dati}
 \begin{itemize}
+    \item AMMINISTRATORE: E, 1
     \item LOTTATORE: E, 250
     \item CATEGORIA: E, 4
     \item DISCIPLINA: E, 3
     \item RECORD: E, 250
     \item CLASSIFICA: E, 250
     \item SCONTRO: E, 2000
-    \item STORICO\textunderscore SCONTRI
+    \item STORICO\textunderscore SCONTRI: E, 2000
     \item EVENTO: E, 700
     \item STORICO\textunderscore EVENTI: E, 700
     \item SPONSORIZZAZIONI: E, 15
     \item TEAM: E, 150
+    \item DIRIGE: A, 20
+    \item GESTISCE: A, 350
+    \item REGOLA: A, 200
+    \item ORGANIZZA: A, 700
     \item DETIENE: A, 250
     \item CONSTITUISCE: A, 250
+    \item MEMORIZZA: A, 2000
     \item DIVISIONE\textunderscore CATEGORIA: A, 4
     \item APPARTIENE: A, 250
     \item PRATICA: A, 375
@@ -118,6 +125,7 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \item PARTECIPA: A, 4000
     \item PAGAMENTO: A, 4000
     \item CONSTITUISCE: A, 2000
+    \item PUBBLICIZZA: A, 3000
     \item CONTRIBUIZIONE: A, 3000
     \item IMMAGAZINA: A, 700
 \end{itemize}
@@ -142,8 +150,10 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE    & E         & 1       & R    \\ \hline
     LOTTATORE         & E         & 1       & W    \\ \hline
-    \textit{TOTALE}   &           & 2       &      \\ \hline
+    GESTISCE          & A         & 1       & R    \\ \hline
+    \textit{TOTALE}   &           & 4       &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -153,8 +163,10 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE    & E         & 1       & R    \\ \hline
     LOTTATORE         & E         & 1       & W    \\ \hline
-    \textit{TOTALE}   &           & 2       &      \\ \hline
+    GESTISCE          & A         & 1       & R    \\ \hline
+    \textit{TOTALE}   &           & 4       &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -164,8 +176,10 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE    & E         & 1       & R    \\ \hline
     TEAM              & E         & 1       & W    \\ \hline
-    \textit{TOTALE}   &           & 2       &      \\ \hline
+    REGOLA            & A         & 1       & R    \\ \hline
+    \textit{TOTALE}   &           & 4       &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -175,8 +189,10 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto          & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE    & E         & 1       & R    \\ \hline
     SPONSORIZZAZIONI  & E         & 1       & W    \\ \hline
-    \textit{TOTALE}   &           & 2       &      \\ \hline
+    DIRIGE            & A         & 1       & R    \\ \hline
+    \textit{TOTALE}   &           & 4       &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -186,6 +202,7 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto                         & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE                   & E         & 1       & R    \\ \hline
     EVENTO                           & E         & 1       & W    \\ \hline
     SCONTRO                          & E         & 3       & W    \\ \hline
     SPONSORIZZAZIONI                 & E         & 1       & R    \\ \hline
@@ -195,10 +212,24 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     PARTECIPA                        & A         & 6       & R    \\ \hline
     CONSTITUISCE                     & A         & 3       & R    \\ \hline
     CONTRIBUIZIONE                   & A         & 1       & R    \\ \hline
+    ORGANIZZA                        & A         & 1       & R    \\ \hline
     IMMAGAZINA                       & A         & 1       & R    \\ \hline
     STORICO\textunderscore SCONTRI   & A         & 3       & R    \\ \hline
     PAGAMENTO                        & A         & 1       & R    \\ \hline
-    \textit{TOTALE}                  &           & 38      &      \\ \hline
+    \textit{TOTALE}                  &           & 40      &      \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Visualizzare la classifica}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto                             & Costrutto & Accessi & Tipo \\ \hline
+    CLASSIFICA                           & E         & 1       & R    \\ \hline
+    CATEGORIA                            & E         & 1       & R    \\ \hline
+    DIVISIONE\textunderscore CATEGORIA   & A         & 1       & R    \\ \hline
+    \textit{TOTALE}                      &           & 3       &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -208,6 +239,7 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto                         & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE                   & E         & 1       & R    \\ \hline
     LOTTATORE                        & E         & 1       & W    \\ \hline
     RECORD                           & E         & 1       & W    \\ \hline
     CATEGORIA                        & E         & 1       & W    \\ \hline
@@ -215,9 +247,10 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     TEAM                             & E         & 1       & W    \\ \hline
     FA\textunderscore PARTE          & A         & 1       & R    \\ \hline
     PRATICA                          & A         & 1       & R    \\ \hline
+    GESTISCE                         & A         & 1       & R    \\ \hline
     APPARTIENE                       & A         & 1       & R    \\ \hline
     DETIENE                          & A         & 1       & R    \\ \hline
-    \textit{TOTALE}                  &           & 14      &      \\ \hline
+    \textit{TOTALE}                  &           & 16      &      \\ \hline
     \end{tabular}
 \end{table}
 
