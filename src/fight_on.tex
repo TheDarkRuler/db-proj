@@ -71,7 +71,7 @@ avendo infine la possibilità di visualizzare i guadagni e le spese totali della
     \item Registrare un nuovo team.
     \item Rimuovere un team.
     \item Aggiungere/Rimuovere uno sponsor.
-    \item Organizzare uno evento.
+    \item Registrare uno evento.
     \item Visualizzare le classifiche.
     \item Modificare i dati dei partecipanti.
 \end{itemize}
@@ -142,7 +142,7 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \item Rimuovere un team: 1/18 g
     \item Registrare un nuovo sponsor: 1/120 g
     \item Rimuovere uno sponsor: 1/210 g
-    \item Organizzare un evento: 1/30 g
+    \item Registrare un evento: 1/20 g
     \item Visualizzare la classifica: 3/ g
     \item Modificare dati di un partecipante: 1/5 g
 \end{itemize} 
@@ -200,7 +200,7 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \end{tabular}
 \end{table}
 
-\subsection{Organizzare un evento}
+\subsection{Registrare un evento}
 \begin{table}[H]
     \paragraph{Tavola degli accessi\newline}
     \begin{tabular}{|c|c|c|c|}
@@ -209,18 +209,21 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     AMMINISTRATORE                   & E         & 1       & R    \\ \hline
     EVENTO                           & E         & 1       & W    \\ \hline
     SCONTRO                          & E         & 3       & W    \\ \hline
-    SPONSORIZZAZIONI                 & E         & 1       & R    \\ \hline
+    SPONSORIZZAZIONI                 & E         & 3       & R    \\ \hline
     STORICO\textunderscore SCONTRI   & E         & 3       & W    \\ \hline
     STORICO\textunderscore EVENTI    & E         & 1       & W    \\ \hline
     LOTTATORE                        & E         & 6       & R    \\ \hline
+    CATEGORIA                        & E         & 6       & R    \\ \hline
+    PUBBLICIZZA                      & A         & 3       & R    \\ \hline
     PARTECIPA                        & A         & 6       & R    \\ \hline
     CONSTITUISCE                     & A         & 3       & R    \\ \hline
-    CONTRIBUIZIONE                   & A         & 1       & R    \\ \hline
+    APPARTIENE                       & A         & 6       & R    \\ \hline
+    CONTRIBUIZIONE                   & A         & 3       & R    \\ \hline
     ORGANIZZA                        & A         & 1       & R    \\ \hline
     IMMAGAZINA                       & A         & 1       & R    \\ \hline
     STORICO\textunderscore SCONTRI   & A         & 3       & R    \\ \hline
-    PAGAMENTO                        & A         & 1       & R    \\ \hline
-    \textit{TOTALE}                  &           & 40      &      \\ \hline
+    PAGAMENTO                        & A         & 6       & R    \\ \hline
+    \textit{TOTALE}                  &           & 64      &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -244,18 +247,90 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     \hline
     Concetto                         & Costrutto & Accessi & Tipo \\ \hline
     AMMINISTRATORE                   & E         & 1       & R    \\ \hline
+    LOTTATORE                        & E         & 1       & R    \\ \hline
     LOTTATORE                        & E         & 1       & W    \\ \hline
+    RECORD                           & E         & 1       & R    \\ \hline
     RECORD                           & E         & 1       & W    \\ \hline
+    CATEGORIA                        & E         & 1       & R    \\ \hline
     CATEGORIA                        & E         & 1       & W    \\ \hline
+    DISCIPLINA                       & E         & 1       & R    \\ \hline
     DISCIPLINA                       & E         & 1       & W    \\ \hline
+    TEAM                             & E         & 1       & R    \\ \hline
     TEAM                             & E         & 1       & W    \\ \hline
     FA\textunderscore PARTE          & A         & 1       & R    \\ \hline
     PRATICA                          & A         & 1       & R    \\ \hline
     GESTISCE                         & A         & 1       & R    \\ \hline
     APPARTIENE                       & A         & 1       & R    \\ \hline
     DETIENE                          & A         & 1       & R    \\ \hline
-    \textit{TOTALE}                  &           & 16      &      \\ \hline
+    \textit{TOTALE}                  &           & 21      &      \\ \hline
     \end{tabular}
 \end{table}
+
+\section{Analisi delle ridondanze}
+\subsection{Campo Categoria nell'entità Lottatore}
+Il campo categoria all'interno di lottatore mi permette di non controllare la categoria di quest'ultimo attraverso il 
+peso nella fase di creazione di uno scontro.
+\subsubsection{Caso senza ridondanza}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto                         & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE                   & E         & 1       & R    \\ \hline
+    EVENTO                           & E         & 1       & W    \\ \hline
+    SCONTRO                          & E         & 3       & W    \\ \hline
+    SPONSORIZZAZIONI                 & E         & 3       & R    \\ \hline
+    STORICO\textunderscore SCONTRI   & E         & 3       & W    \\ \hline
+    STORICO\textunderscore EVENTI    & E         & 1       & W    \\ \hline
+    LOTTATORE                        & E         & 6       & R    \\ \hline
+    CATEGORIA                        & E         & 6       & R    \\ \hline
+    PUBBLICIZZA                      & A         & 3       & R    \\ \hline
+    PARTECIPA                        & A         & 6       & R    \\ \hline
+    CONSTITUISCE                     & A         & 3       & R    \\ \hline
+    APPARTIENE                       & A         & 6       & R    \\ \hline
+    CONTRIBUIZIONE                   & A         & 3       & R    \\ \hline
+    ORGANIZZA                        & A         & 1       & R    \\ \hline
+    IMMAGAZINA                       & A         & 1       & R    \\ \hline
+    STORICO\textunderscore SCONTRI   & A         & 3       & R    \\ \hline
+    PAGAMENTO                        & A         & 6       & R    \\ \hline
+    \textit{TOTALE}                  &           & 64      &      \\ \hline
+    \end{tabular}
+\end{table}
+\begin{equation}
+    \frac{1}{20g} \times 64R = 3,2 \frac{R}{g}
+\end{equation}
+
+\subsubsection{Caso con ridondanza}
+\begin{table}[H]
+    \paragraph{Tavola degli accessi\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto                         & Costrutto & Accessi & Tipo \\ \hline
+    AMMINISTRATORE                   & E         & 1       & R    \\ \hline
+    EVENTO                           & E         & 1       & W    \\ \hline
+    SCONTRO                          & E         & 3       & W    \\ \hline
+    SPONSORIZZAZIONI                 & E         & 3       & R    \\ \hline
+    STORICO\textunderscore SCONTRI   & E         & 3       & W    \\ \hline
+    STORICO\textunderscore EVENTI    & E         & 1       & W    \\ \hline
+    LOTTATORE                        & E         & 6       & R    \\ \hline
+    PUBBLICIZZA                      & A         & 3       & R    \\ \hline
+    PARTECIPA                        & A         & 6       & R    \\ \hline
+    CONSTITUISCE                     & A         & 3       & R    \\ \hline
+    CONTRIBUIZIONE                   & A         & 3       & R    \\ \hline
+    ORGANIZZA                        & A         & 1       & R    \\ \hline
+    IMMAGAZINA                       & A         & 1       & R    \\ \hline
+    STORICO\textunderscore SCONTRI   & A         & 3       & R    \\ \hline
+    PAGAMENTO                        & A         & 6       & R    \\ \hline
+    \textit{TOTALE}                  &           & 52      &      \\ \hline
+    \end{tabular}
+\end{table}
+\begin{equation}
+    \frac{1}{20g} \times 52R = 2,6 \frac{R}{g}
+\end{equation}
+Concludo quindi che devo preservare la ridondanza.
+
+\section{Traduzione di entità e associazioni in relazioni}
+
+
 
 \end{document}
