@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { Lottatore } from './entity/Lottatore';
+import { Lottatore } from './entity/lottatore';
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -33,8 +33,8 @@ AppDataSource.initialize().then(async connection => {
     lottatore.nome = "Oracle Magazine";
     lottatore.cognome = "Oracle Publishing";
     lottatore.codiceFiscale = "March-April 2005";
-    lottatore.team = "Oracle ADF";
-    lottatore.arteMarziale = "BJJ";
+    lottatore.team = "sakfnas";
+    lottatore.arteMarziale = "caio";
     lottatore.dataNascita = new Date(1999, 22, 1);
     lottatore.peso = 30;
 

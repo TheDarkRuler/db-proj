@@ -2,27 +2,44 @@ DROP DATABASE IF EXISTS fight_on;
 CREATE DATABASE fight_on;
 USE fight_on;
 
+CREATE TABLE AMMINISTRATORE (
+	username varchar(30) NOT NULL PRIMARY KEY
+);
+
 CREATE TABLE LOTTATORE (
 	nome varchar(20) NOT NULL,
     cognome varchar(30) NOT NULL,
 	codiceFiscale varchar(20) NOT NULL,
-    team varchar(40),
     dataNascita date NOT NULL,
     peso float NOT NULL,
+    categoria varchar(20) NOT NULL,
     arteMarziale SET('BJJ', 'MMA', 'MuayThai') NOT NULL,
     PRIMARY KEY (codiceFiscale)
 );
 
+CREATE TABLE TEAM (
+	idTeam integer NOT NULL,
+	nome varchar(50) NOT NULL,
+    nome_responsabile varchar(20),
+    origine varchar(40),
+    PRIMARY KEY (idTeam)
+);
+
 CREATE TABLE RECORD (
+	idRecord integer NOT NULL,
 	vittorie integer,
     sconfitte integer,
-    pareggi integer
+    pareggi integer,
+    PRIMARY KEY (idRecord)
 );
 
 CREATE TABLE CLASSIFICA (
 	nome varchar(20) NOT NULL,
     cognome varchar(30) NOT NULL,
-    punteggio integer
+	codiceFiscale varchar(20) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale SET('BJJ', 'MMA', 'MuayThai') NOT NULL,
+	PRIMARY KEY (codiceFiscale)
 );
 
 CREATE TABLE DISCIPLINA (
@@ -30,7 +47,9 @@ CREATE TABLE DISCIPLINA (
 );
 
 CREATE TABLE CATEGORIA (
-	nome ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi') PRIMARY KEY
+	nome ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi') PRIMARY KEY,
+    pesoMinimo integer,
+    pesoMassimo integer
 );
 
 CREATE TABLE SCONTRO (
@@ -67,6 +86,13 @@ CREATE TABLE EVENTO (
     introitiNetti float,
     PRIMARY KEY (idEvento),
     CONSTRAINT ORARIO CHECK (oraInizio < oraFine)
+);
+
+CREATE TABLE SPONSORIZZAZIONI (
+	idSponsor integer NOT NULL,
+    nome varchar(40) NOT NULL,
+    pagamentoSponsor float,
+    PRIMARY KEY (idSponsor)
 );
 
 CREATE TABLE STORICO_EVENTI (
