@@ -2,10 +2,12 @@ DROP DATABASE IF EXISTS fight_on;
 CREATE DATABASE fight_on;
 USE fight_on;
 
+DROP TABLE IF EXISTS AMMINISTRATORE;
 CREATE TABLE AMMINISTRATORE (
 	username varchar(30) NOT NULL PRIMARY KEY
 );
 
+DROP TABLE IF EXISTS LOTTATORE;
 CREATE TABLE LOTTATORE (
 	nome varchar(20) NOT NULL,
     cognome varchar(30) NOT NULL,
@@ -17,6 +19,7 @@ CREATE TABLE LOTTATORE (
     PRIMARY KEY (codiceFiscale)
 );
 
+DROP TABLE IF EXISTS TEAM;
 CREATE TABLE TEAM (
 	idTeam integer NOT NULL,
 	nome varchar(50) NOT NULL,
@@ -25,6 +28,7 @@ CREATE TABLE TEAM (
     PRIMARY KEY (idTeam)
 );
 
+DROP TABLE IF EXISTS RECORD;
 CREATE TABLE RECORD (
 	idRecord integer NOT NULL,
 	vittorie integer,
@@ -33,6 +37,7 @@ CREATE TABLE RECORD (
     PRIMARY KEY (idRecord)
 );
 
+DROP TABLE IF EXISTS CLASSIFICA;
 CREATE TABLE CLASSIFICA (
 	nome varchar(20) NOT NULL,
     cognome varchar(30) NOT NULL,
@@ -42,16 +47,19 @@ CREATE TABLE CLASSIFICA (
 	PRIMARY KEY (codiceFiscale)
 );
 
+DROP TABLE IF EXISTS DISCIPLINA;
 CREATE TABLE DISCIPLINA (
 	nome SET('BJJ','MMA','MuayThai') PRIMARY KEY
 );
 
+DROP TABLE IF EXISTS CATEGORIA;
 CREATE TABLE CATEGORIA (
 	nome ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi') PRIMARY KEY,
     pesoMinimo integer,
     pesoMassimo integer
 );
 
+DROP TABLE IF EXISTS SCONTRO;
 CREATE TABLE SCONTRO (
 	idScontro integer NOT NULL,
     disciplina ENUM('BJJ','MMA','MuayThai'),
@@ -60,6 +68,7 @@ CREATE TABLE SCONTRO (
     PRIMARY KEY (idScontro)
 );
 
+DROP TABLE IF EXISTS STORICO_SCONTRI;
 CREATE TABLE STORICO_SCONTRI (
 	idScontro integer NOT NULL,
     primoPartecipante varchar(50) NOT NULL,
@@ -72,6 +81,7 @@ CREATE TABLE STORICO_SCONTRI (
 		(pareggio IS FALSE AND vincitore IS NOT NULL AND perdente IS NOT NULL))
 );
 
+DROP TABLE IF EXISTS EVENTO;
 CREATE TABLE EVENTO (
 	idEvento integer NOT NULL,
     nomeStadio varchar(40) NOT NULL,
@@ -85,9 +95,10 @@ CREATE TABLE EVENTO (
     bigliettiPremiumVenduti integer,
     introitiNetti float,
     PRIMARY KEY (idEvento),
-    CONSTRAINT ORARIO CHECK (oraInizio < oraFine)
+    CONSTRAINT ORARIO CHECK (oraInizio <= oraFine)
 );
 
+DROP TABLE IF EXISTS SPONSORIZZAZIONI;
 CREATE TABLE SPONSORIZZAZIONI (
 	idSponsor integer NOT NULL,
     nome varchar(40) NOT NULL,
@@ -95,6 +106,7 @@ CREATE TABLE SPONSORIZZAZIONI (
     PRIMARY KEY (idSponsor)
 );
 
+DROP TABLE IF EXISTS STORICO_EVENTI;
 CREATE TABLE STORICO_EVENTI (
 	idEvento integer NOT NULL,
     introiti float,
