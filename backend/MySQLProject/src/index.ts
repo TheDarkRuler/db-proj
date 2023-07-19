@@ -15,7 +15,7 @@ const AppDataSource = new DataSource({
     entities: [
         __dirname + "/entity/*.ts"
     ],
-    synchronize: true,
+    synchronize: false,
     logging: false
 });/*.then(async connection => {
     let lottatore = new Lottatore();
@@ -44,7 +44,7 @@ AppDataSource.initialize().then(async connection => {
     Amministratore.username = "TheDarkRuler";
     await connection.manager.save(Amministratore);
 
-    /*Categoria1.nome = "Peso Piuma"
+    Categoria1.nome = "PesoPiuma"
     Categoria1.pesoMassimo = 65
     await connection.manager.save(Categoria1);
 
@@ -53,25 +53,22 @@ AppDataSource.initialize().then(async connection => {
     Categoria2.pesoMassimo = 77
     await connection.manager.save(Categoria2);
 
-    Categoria3.nome = "Peso Medio"
+    Categoria3.nome = "PesoMedio"
     Categoria3.pesoMinimo = 78
     Categoria3.pesoMassimo = 84
     await connection.manager.save(Categoria3);
 
-    Categoria4.nome = "Pesi Massimi"
+    Categoria4.nome = "PesiMassimi"
     Categoria4.pesoMinimo = 85
     await connection.manager.save(Categoria4);
 
     Disciplina1.nome = "BJJ"
-    await connection.manager.save(Categoria1);
+    await connection.manager.save(Disciplina1);
 
     Disciplina2.nome = "MMA"
-    await connection.manager.save(Categoria2);
+    await connection.manager.save(Disciplina2);
 
     Disciplina3.nome = "MuayThai"
-    await connection.manager.save(Categoria3);*/
+    await connection.manager.save(Disciplina3);
 
 }).catch(error => console.log(error));
-
-/*const ciao = AppDataSource.query(`SELECT * FROM lottatore`);
-console.log(ciao);*/

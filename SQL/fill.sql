@@ -1,19 +1,28 @@
 USE fight_on;
 
-INSERT INTO LOTTATORE (nome, cognome, codiceFiscale, team, dataNascita, peso, arteMarziale)
+INSERT INTO AMMINISTRATORE (username)
+	VALUES ("TheDarkRuler");
+    
+INSERT INTO TEAM (idTeam, nome, nome_responsabile, origine)
+	VALUES($1, $2, $3, $4);
+
+INSERT INTO SPONSORIZZAZIONI (idSponsor, nome, pagamentoSponsor)
+	VALUES ($1, $2, $3);
+
+INSERT INTO LOTTATORE (nome, cognome, codiceFiscale, dataNascita, peso, categoria, arteMarziale)
 	VALUES ($1, $2, $3, $4, $5, $6, $7);
     
-INSERT INTO RECORD (vittorie, sconfitte, pareggi)
-	VALUES ($1, $2, $3);
+INSERT INTO RECORD (idRecord, vittorie, sconfitte, pareggi)
+	VALUES ($1, $2, $3, $4);
     
-INSERT INTO CLASSIFICA (nome, cognome, punteggio)
-	VALUES ($1, $2, $3);
+INSERT INTO CLASSIFICA (nome, cognome, codiceFiscale, peso, arteMarziale)
+	VALUES ($1, $2, $3, $4, $5);
     
 INSERT INTO DISCIPLINA (nome)
 	VALUES ($1);
     
-INSERT INTO CATEGORIA (nome)
-	VALUES ($1);
+INSERT INTO CATEGORIA (nome, pesoMinimo, pesoMassimo)
+	VALUES ($1, $2, $3);
     
 INSERT INTO SCONTRO (idScontro, disciplina, categoria, pagamentoExtra)
 	VALUES ($1, $2, $3, $4);

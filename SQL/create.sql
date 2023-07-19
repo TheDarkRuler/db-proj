@@ -55,8 +55,8 @@ CREATE TABLE DISCIPLINA (
 DROP TABLE IF EXISTS CATEGORIA;
 CREATE TABLE CATEGORIA (
 	nome ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi') PRIMARY KEY,
-    pesoMinimo integer,
-    pesoMassimo integer
+    pesoMinimo integer DEFAULT 0,
+    pesoMassimo integer DEFAULT 500
 );
 
 DROP TABLE IF EXISTS SCONTRO;
