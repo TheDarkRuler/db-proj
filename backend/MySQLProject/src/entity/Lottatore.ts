@@ -1,7 +1,7 @@
 import {Entity, Column, PrimaryGeneratedColumn, PrimaryColumn} from "typeorm";
 
 @Entity()
-export class Lottatore {
+export class lottatore {
 
     @PrimaryColumn({
         length: 20
