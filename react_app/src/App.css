@@ -2,37 +2,53 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+.MyButton {
+  display: inline-block;
+  opacity: 0.6;
+  border-radius: 30px;
+  background-color: gold;
+  border: 5px solid #000000;
+  color: #000000;
+  text-align: center;
+  font-size: 15px;
+  padding: 20px;
+  width: 220px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 20%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.MyButton:hover {
+  opacity: 1;
 }
 
-.App-link {
-  color: #61dafb;
+.MyButton span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.MyButton span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.MyButton:hover span {
+  padding-right: 25px;
+}
+
+.MyButton:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
 }
