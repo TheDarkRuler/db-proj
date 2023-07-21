@@ -14,14 +14,19 @@ export class lottatore {
     nome: string
 
     @Column({
+        length: 40
+    })
+    team: string
+
+    @Column({
         length: 30
     })
     cognome: string
 
     @Column({
-        length: 40
+        length: 20
     })
-    team: string
+    categoria: string
 
     @Column()
     dataNascita: Date

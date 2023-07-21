@@ -12,4 +12,7 @@ export class storicoEventi {
     @Column()
     spese: number
 
+    @Column()
+    guadagniComplessivi: number
+
 }

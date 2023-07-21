@@ -1,4 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn, PrimaryColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, PrimaryColumn, OneToOne, JoinColumn, Collection} from "typeorm";
+import { sponsorizzazioni } from "./sponsorizzazioni";
 
 @Entity()
 export class evento {
@@ -9,7 +10,7 @@ export class evento {
     @Column({
         length: 40
     })
-    nome_stadio: string
+    nomeStadio: string
 
     @Column({
         length: 40
@@ -32,12 +33,21 @@ export class evento {
     oraFine: number
 
     @Column()
-    bigliettiStandardSold: number
+    bigliettiStandardVenduti: number
 
     @Column()
-    bigliettiPremiumSold: number
+    bigliettiPremiumVenduti: number
 
     @Column()
-    introitiNetti: number
+    costoBigliettiStandard: number
 
+    @Column()
+    costoBigliettiPremium: number
+
+    @Column('simple-json')
+    sponsor: {
+        sponsor1: string
+        sponsor2: string
+        sponsor3: string
+    }
 }

@@ -9,13 +9,14 @@ CREATE TABLE AMMINISTRATORE (
 
 DROP TABLE IF EXISTS LOTTATORE;
 CREATE TABLE LOTTATORE (
+	codiceFiscale varchar(50) NOT NULL,
 	nome varchar(20) NOT NULL,
     cognome varchar(30) NOT NULL,
-	codiceFiscale varchar(20) NOT NULL,
     dataNascita date NOT NULL,
+    team varchar(40),
     peso float NOT NULL,
     categoria varchar(20) NOT NULL,
-    arteMarziale SET('BJJ', 'MMA', 'MuayThai') NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
     PRIMARY KEY (codiceFiscale)
 );
 
@@ -30,53 +31,85 @@ CREATE TABLE TEAM (
 
 DROP TABLE IF EXISTS RECORD;
 CREATE TABLE RECORD (
-	idRecord integer NOT NULL,
+	codiceFiscale varchar(50) NOT NULL,
 	vittorie integer,
     sconfitte integer,
     pareggi integer,
-    PRIMARY KEY (idRecord)
+    PRIMARY KEY (codiceFiscale)
 );
 
-DROP TABLE IF EXISTS CLASSIFICA;
-CREATE TABLE CLASSIFICA (
+DROP TABLE IF EXISTS CLASSIFICA_PIUMA;
+CREATE TABLE CLASSIFICA_PIUMA (
+	codiceFiscale varchar(50) NOT NULL,
 	nome varchar(20) NOT NULL,
     cognome varchar(30) NOT NULL,
-	codiceFiscale varchar(20) NOT NULL,
     peso float NOT NULL,
-    arteMarziale SET('BJJ', 'MMA', 'MuayThai') NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
+	PRIMARY KEY (codiceFiscale)
+);
+
+DROP TABLE IF EXISTS CLASSIFICA_WELTERWEIGHT;
+CREATE TABLE CLASSIFICA_WELTERWEIGHT (
+	codiceFiscale varchar(50) NOT NULL,
+	nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
+	PRIMARY KEY (codiceFiscale)
+);
+
+DROP TABLE IF EXISTS CLASSIFICA_MEDIO;
+CREATE TABLE CLASSIFICA_MEDIO (
+	codiceFiscale varchar(50) NOT NULL,
+	nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
+	PRIMARY KEY (codiceFiscale)
+);
+
+DROP TABLE IF EXISTS CLASSIFICA_MASSIMI;
+CREATE TABLE CLASSIFICA_MASSIMI (
+	codiceFiscale varchar(50) NOT NULL,
+	nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
 	PRIMARY KEY (codiceFiscale)
 );
 
 DROP TABLE IF EXISTS DISCIPLINA;
 CREATE TABLE DISCIPLINA (
-	nome SET('BJJ','MMA','MuayThai') PRIMARY KEY
+	nome ENUM('BJJ','MMA','MuayThai') PRIMARY KEY
 );
 
 DROP TABLE IF EXISTS CATEGORIA;
 CREATE TABLE CATEGORIA (
 	nome ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi') PRIMARY KEY,
-    pesoMinimo integer DEFAULT 0,
-    pesoMassimo integer DEFAULT 500
+    pesoMinimo integer,
+    pesiMassimi integer 
 );
 
 DROP TABLE IF EXISTS SCONTRO;
 CREATE TABLE SCONTRO (
+    idEvento integer NOT NULL,
 	idScontro integer NOT NULL,
     disciplina ENUM('BJJ','MMA','MuayThai'),
     categoria ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi'),
     pagamentoExtra float,
-    PRIMARY KEY (idScontro)
+    PRIMARY KEY (idEvento, idScontro)
 );
 
 DROP TABLE IF EXISTS STORICO_SCONTRI;
 CREATE TABLE STORICO_SCONTRI (
+    idEvento integer NOT NULL,
 	idScontro integer NOT NULL,
     primoPartecipante varchar(50) NOT NULL,
     secondoPartecipante varchar(50) NOT NULL,
     vincitore varchar(50),
     perdente varchar(50),
     pareggio bool,
-    PRIMARY KEY (idScontro),
+    PRIMARY KEY (idScontro, idEvento),
 	CONSTRAINT PAREGGIO CHECK ((pareggio IS TRUE AND vincitore IS NULL AND perdente IS NULL) OR
 		(pareggio IS FALSE AND vincitore IS NOT NULL AND perdente IS NOT NULL))
 );
@@ -93,7 +126,9 @@ CREATE TABLE EVENTO (
     oraFine time NOT NULL,
     bigliettiStandardVenduti integer,
     bigliettiPremiumVenduti integer,
-    introitiNetti float,
+    costoBigliettiPremium integer,
+    costoBigliettiStandard integer,
+    sponsor JSON,
     PRIMARY KEY (idEvento),
     CONSTRAINT ORARIO CHECK (oraInizio <= oraFine)
 );
@@ -111,5 +146,6 @@ CREATE TABLE STORICO_EVENTI (
 	idEvento integer NOT NULL,
     introiti float,
     spese float,
+    guadagniComplessivi float,
     PRIMARY KEY (idEvento)
 );

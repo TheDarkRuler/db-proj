@@ -6,6 +6,9 @@ export class storicoScontri {
     @PrimaryColumn()
     idScontro: number
 
+    @PrimaryColumn()
+    idEvento: number
+
     @Column({
         length: 20
     })
@@ -24,7 +27,7 @@ export class storicoScontri {
     @Column({
         length: 20
     })
-    sconfitto: string
+    perdente: string
 
     @Column()
     pareggio: boolean

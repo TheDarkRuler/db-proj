@@ -12,6 +12,6 @@ export class categoria {
     pesoMinimo: number
 
     @Column()
-    pesoMassimo: number
+    pesiMassimi: number
 
 }

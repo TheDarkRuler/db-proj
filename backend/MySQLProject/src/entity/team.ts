@@ -14,11 +14,11 @@ export class team {
     @Column({
         length: 30
     })
-    nomeResponsabile: string
+    nome_responsabile: string
 
     @Column({
         length: 30
     })
-    luogo: string
+    origine: string
 
 }

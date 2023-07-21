@@ -3,8 +3,8 @@ import {Entity, Column, PrimaryGeneratedColumn, PrimaryColumn} from "typeorm";
 @Entity()
 export class record {
 
-    @PrimaryGeneratedColumn()
-    idRecord: number
+    @PrimaryColumn()
+    codiceFiscale: string
 
     @Column()
     vittorie: number
