@@ -2,8 +2,10 @@ import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import Operations from './operations/Operations';
+import Statistics from './statistics/Statistics';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +13,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+    <Routes>
+        <Route path='/' element={<App />} />
+        <Route path='Statistics' element={<Statistics />} />
+        <Route path='Operations' element={<Operations />} />
+      </Routes>
     </BrowserRouter>
   </StrictMode>
 );

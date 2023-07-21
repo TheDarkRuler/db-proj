@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 import background from './img/mma-background.jpg';
 import { Route, Routes, useNavigate } from "react-router-dom";
-import Statistics from './Statistics/Statistics';
-import Operations from './Operations/Operations';
+import Statistics from './statistics/Statistics';
+import Operations from './operations/Operations';
 
 function OperationButton() {
 
@@ -45,7 +45,6 @@ function App() {
 
     <div className="App">
       <Routes>
-        <Route path="/" element={<App />} />
         <Route path="Statistics" element={<Statistics />} />
         <Route path="Operations" element={<Operations />} />
       </Routes>
