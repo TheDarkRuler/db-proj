@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import Operations from './operations/Operations';
 import Statistics from './statistics/Statistics';
+import Lottatore from './operations/Lottatore';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,6 +18,7 @@ root.render(
         <Route path='/' element={<App />} />
         <Route path='Statistics' element={<Statistics />} />
         <Route path='Operations' element={<Operations />} />
+        <Route path='Operations/Lottatore' element={<Lottatore />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

@@ -5,6 +5,7 @@ import { categoria } from './entity/categoria';
 import { disciplina } from './entity/disciplina';
 import { populate } from './populate';
 import { common } from './common';
+import { operations } from './operations';
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -27,8 +28,14 @@ AppDataSource.initialize().then(async connection => {
     let Populate = new populate(connection);
     let Common = new common();
 
+    let Operations = new operations();
 
-    Amministratore.username = "TheDarkRuler";
+    var temp = Operations.getTeams();
+    (await temp).forEach(x => {
+        console.log(x);
+    });
+
+    /*Amministratore.username = "TheDarkRuler";
     await connection.manager.save(Amministratore);
 
     Categoria.nome = "PesoPiuma"
@@ -69,8 +76,10 @@ AppDataSource.initialize().then(async connection => {
                 Populate.populateEvento(Common.card_evento());
             });
         });    
-    });
+    });*/
 
 
 
 }).catch(error => console.log(error));
+
+export default AppDataSource;

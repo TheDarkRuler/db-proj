@@ -44,10 +44,6 @@ function App() {
   return (
 
     <div className="App">
-      <Routes>
-        <Route path="Statistics" element={<Statistics />} />
-        <Route path="Operations" element={<Operations />} />
-      </Routes>
       <div style={{backgroundImage: `url(${background})`, 
       backgroundSize: 'cover',
       backgroundRepeat: "no-repeat",
