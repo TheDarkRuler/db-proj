@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom/client';
 import "reflect-metadata";
 import './index.css';
 import App from './App';
+import "primereact/resources/themes/lara-light-indigo/theme.css";     
+import "primereact/resources/primereact.min.css"; 
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import Operations from './operations/Operations';
+import Operations from './operations/common/Operations';
 import Statistics from './statistics/Statistics';
-import Lottatore from './operations/Lottatore';
+import Lottatore from './operations/lottatore/Lottatore';
+import Team from './operations/team/Team';
+import Sponsor from './operations/sponsor/Sponsor';
+import Evento from './operations/evento/Evento';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,6 +27,9 @@ root.render(
         <Route path='Statistics' element={<Statistics />} />
         <Route path='Operations' element={<Operations />} />
         <Route path='Operations/Lottatore' element={<Lottatore />} />
+        <Route path='Operations/Team' element={<Team />} />
+        <Route path='Operations/Sponsor' element={<Sponsor />} />
+        <Route path='Operations/Evento' element={<Evento />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

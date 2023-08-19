@@ -1,4 +1,4 @@
-import { uniqueNamesGenerator, Config, names, NumberDictionary, adjectives, colors, animals, countries } from 'unique-names-generator';
+import { uniqueNamesGenerator, Config, names, adjectives, colors, animals, countries } from 'unique-names-generator';
 import { lottatore } from './entity/lottatore';
 import { classifica_piuma } from './entity/classifica_piuma';
 import { evento } from './entity/evento';

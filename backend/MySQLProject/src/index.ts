@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { DataSource, createConnection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { amministratore } from './entity/amministratore';
 import { categoria } from './entity/categoria';
 import { disciplina } from './entity/disciplina';
@@ -19,8 +19,6 @@ const AppDataSource = new DataSource({
     synchronize: false,
     logging: false
 });
-
-console.log ("ciadj");
 
 AppDataSource.initialize().then(async connection => {
     let Amministratore = new amministratore();

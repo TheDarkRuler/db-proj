@@ -1,15 +1,13 @@
 import React from 'react';
 import './App.css';
 import background from './img/mma-background.jpg';
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Statistics from './statistics/Statistics';
-import Operations from './operations/Operations';
+import { useNavigate } from "react-router-dom";
 import "reflect-metadata";
 
 function OperationButton() {
 
   let navigate = useNavigate(); 
-  const routeChange = () =>{ 
+  const routeChange = () => {
     let path = `Operations`; 
     navigate(path, {replace: true});
   }

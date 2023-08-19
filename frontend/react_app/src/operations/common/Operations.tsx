@@ -1,12 +1,12 @@
 import React from 'react';
 import './Operations.css'
 import { useNavigate } from 'react-router-dom';
-import background from '../img/operationsBack.jpg';
+import background from '../../img/operationsBack.jpg';
 
 function LottatoreButton() {
 
     let navigate = useNavigate(); 
-    const routeChange = () =>{ 
+    const routeChange = () => { 
       let path = `/Operations/Lottatore`;
       navigate(path, {replace: true});
     }
@@ -23,8 +23,8 @@ function LottatoreButton() {
 function TeamButton() {
 
     let navigate = useNavigate(); 
-    const routeChange = () =>{ 
-        let path = `/`;
+    const routeChange = () => { 
+        let path = `/Operations/Team`;
         navigate(path, {replace: true});
     }
     
@@ -40,8 +40,8 @@ function TeamButton() {
 function SponsorButton() {
 
     let navigate = useNavigate(); 
-    const routeChange = () =>{ 
-        let path = `/`;
+    const routeChange = () => { 
+        let path = `/Operations/Sponsor`;
         navigate(path, {replace: true});
     }
     
@@ -57,8 +57,8 @@ function SponsorButton() {
 function Evento() {
 
     let navigate = useNavigate(); 
-    const routeChange = () =>{ 
-        let path = `/`;
+    const routeChange = () => { 
+        let path = `/Operations/Evento`;
         navigate(path, {replace: true});
     }
     
@@ -74,7 +74,7 @@ function Evento() {
 function ModificaLottatore() {
 
     let navigate = useNavigate(); 
-    const routeChange = () =>{ 
+    const routeChange = () => { 
         let path = `/`;
         navigate(path, {replace: true});
     }
@@ -91,7 +91,7 @@ function ModificaLottatore() {
 function BackToMenu() {
 
     let navigate = useNavigate(); 
-    const routeChange = () =>{ 
+    const routeChange = () => { 
         let path = `/`;
         navigate(path, {replace: true});
     }
