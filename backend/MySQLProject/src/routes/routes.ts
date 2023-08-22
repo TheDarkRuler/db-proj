@@ -14,13 +14,9 @@ router.get('/team/rimuovi/:id', controller.deleteTeam);
 router.get('/sponsor', controller.getSponsor);
 router.get('/sponsor/aggiungi/:nome/:pagamento', controller.putSponsor);
 router.get('/sponsor/rimuovi/:id', controller.deleteSponsor);
-router.get('/evento/aggiungi/:stadio/:luogo/:rent/:satff/:start/:end/:date\
-            /:firstSpo/:secondSpo/:thirdSpo/:standNum/:standPrice/:premNum/:premPrice', controller.putEvento2Scontri);
-router.get('/evento/aggiungi/:stadio/:luogo/:rent/:satff/:start/:end/:date\
-            /:firstSpo/:secondSpo/:thirdSpo/:standNum/:standPrice/:premNum/:premPrice', controller.putEvento3Scontri);
-router.get('/evento/aggiungi/:stadio/:luogo/:rent/:satff/:start/:end/:date\
-            /:firstSpo/:secondSpo/:thirdSpo/:standNum/:standPrice/:premNum/:premPrice', controller.putEvento4Scontri);
-router.get('/evento/aggiungi/:stadio/:luogo/:rent/:satff/:start/:end/:date\
-            /:firstSpo/:secondSpo/:thirdSpo/:standNum/:standPrice/:premNum/:premPrice', controller.putEvento5Scontri);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII', controller.putEventoIIScontri);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII', controller.putEventoIIIScontri);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroIV', controller.putEventoIVScontri);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroVI/:scontroV', controller.putEventoVScontri);
 
 export = router;

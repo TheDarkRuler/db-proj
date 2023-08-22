@@ -9,6 +9,11 @@ import { classifica_piuma } from '../entity/classifica_piuma';
 import { classifica_welterweight } from '../entity/classifica_welterweight';
 import { classifica_medio } from '../entity/classifica_medio';
 import { classifica_massimi } from '../entity/classifica_massimi';
+import { evento } from '../entity/evento';
+import { record } from '../entity/record';
+import { scontro } from '../entity/scontro';
+import { storicoScontri } from '../entity/storicoScontri';
+import { storicoEventi } from '../entity/storicoEventi';
 
 const getLottatori = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -62,11 +67,18 @@ const putLottatore = async (req: Request, res: Response, next: NextFunction) => 
     temp.team = req.params.team.replace(":","");
     temp.dataNascita = new Date(req.params.nascita.replace(":",""));
     AppDataSource.manager.save(temp);
+    let tempRecord = new record;
+    tempRecord.codiceFiscale = temp.codiceFiscale;
+    tempRecord.vittorie = 0;
+    tempRecord.sconfitte = 0;
+    tempRecord.pareggi = 0;
+    AppDataSource.manager.getRepository(record).save(tempRecord); 
 };
 
 const deleteLottatore = async (req: Request, res: Response, next: NextFunction) => {
     let codiceFiscale = req.params.cf.replace(":","");
     AppDataSource.manager.getRepository(lottatore).delete(codiceFiscale);
+    AppDataSource.manager.getRepository(record).delete(codiceFiscale);
 };
 
 const getCategorie = async (req: Request, res: Response, next: NextFunction) => {
@@ -101,7 +113,7 @@ const getTeams = async (req: Request, res: Response, next: NextFunction) => {
 
 const putTeam = async (req: Request, res: Response, next: NextFunction) => {
     let temp = new team;
-    temp.idTeam = (await AppDataSource.manager.find(team)).length + 1;
+    temp.idTeam = (await AppDataSource.manager.find(team)).length;
     temp.nome = req.params.TeamName.replace(":","");
     temp.nome_responsabile = req.params.CeoName.replace(":","");
     temp.origine = req.params.Countrie.replace(":","");
@@ -133,7 +145,7 @@ const getSponsor = async (req: Request, res: Response, next: NextFunction) => {
 
 const putSponsor = async (req: Request, res: Response, next: NextFunction) => {
     let temp = new sponsorizzazioni;
-    temp.idSponsor = (await AppDataSource.manager.find(sponsorizzazioni)).length + 1;
+    temp.idSponsor = (await AppDataSource.manager.find(sponsorizzazioni)).length;
     temp.nome = req.params.nome.replace(":","");
     temp.pagamentoSponsor = parseInt(req.params.pagamento.replace(":",""));
     AppDataSource.manager.save(temp);
@@ -152,16 +164,195 @@ const deleteSponsor = async (req: Request, res: Response, next: NextFunction) =>
     AppDataSource.manager.getRepository(sponsorizzazioni).delete((await temp).idSponsor);
 };
 
-const putEvento2Scontri = async (req: Request, res: Response, next: NextFunction) => {
+const putEvento = async (jTemp: any, idEvento: number, pagEffettuati: number) => {
+    let temp = new evento;
+    temp.idEvento = idEvento;
+    temp.nomeStadio = jTemp.stadio;
+    temp.luogo = jTemp.countrie;
+    temp.costoNoleggio = parseInt(jTemp.rent);
+    temp.spesaStaff = parseInt(jTemp.staff);
+    temp.oraInizio = jTemp.start;
+    temp.oraFine = jTemp.end;
+    temp.dataEvento = new Date(jTemp.date);
+    temp.sponsor = {
+        sponsor1: jTemp.firstSpo,
+        sponsor2: jTemp.secondSpo,
+        sponsor3: jTemp.thirdSpo
+    }
+    temp.bigliettiStandardVenduti = parseInt(jTemp.standNum);
+    temp.costoBigliettiStandard = parseInt(jTemp.standPrice);
+    temp.bigliettiPremiumVenduti = parseInt(jTemp.premNum);
+    temp.costoBigliettiPremium = parseInt(jTemp.premPrice);
+    AppDataSource.manager.getRepository(evento).save(temp);
+    putStoricoEventi(jTemp, idEvento, pagEffettuati);
+}
+
+const putStoricoEventi = async (jTemp: any, idEvento: number, pagEffettuati: number) => {
+    let temp = new storicoEventi;
+    let income = 0;
+    const sponsors = AppDataSource.manager.getRepository(sponsorizzazioni).find();
+    temp.idEvento = idEvento;
+    if( jTemp.firstSpo !== undefined ) {
+        (await sponsors).forEach(x => { 
+            if (x.nome === jTemp.firstSpo) {
+                income += x.pagamentoSponsor;
+            }});
+    };
+    if( jTemp.secondSpo !== undefined ) {
+        (await sponsors).forEach(x => { 
+            if (x.nome === jTemp.secondSpo) {
+                income += x.pagamentoSponsor;
+            }});
+    };
+    if( jTemp.thirdSpo !== undefined ) {
+        (await sponsors).forEach(x => { 
+            if (x.nome === jTemp.thirdSpo) {
+                income += x.pagamentoSponsor;
+            }});
+    };
+    temp.introiti = income + (parseInt(jTemp.standNum) * parseInt(jTemp.standPrice)) + 
+        (parseInt(jTemp.premNum) * parseInt(jTemp.premPrice));
+    temp.spese = pagEffettuati + parseInt(jTemp.rent) + parseInt(jTemp.staff);
+    temp.guadagniComplessivi = temp.introiti - temp.spese;
+    AppDataSource.manager.getRepository(storicoEventi).save(temp);
+}
+
+const putStoricoScontri = async (jTemp: any, idEvento: number) => {
+    let temp = new storicoScontri;
+    temp.idEvento = idEvento;
+    temp.idScontro = jTemp.numScontro;
+    temp.pareggio = jTemp.pareggio;
+    temp.vincitore = jTemp.vincitore;
+    temp.perdente = jTemp.perdente;
+    temp.primoPartecipante = jTemp.primoPart;
+    temp.secondoPartecipante = jTemp.secondoPart;
+    temp.pareggio? editRecordPareggio(temp.primoPartecipante, temp.secondoPartecipante) : 
+        editRecord(temp.vincitore, temp.perdente);
+    AppDataSource.manager.getRepository(storicoScontri).save(temp);
+}
+
+const editRecord = (vincitore: string, perdente: string) => {
+    let tempVincitore = new record;
+    let tempPerdente = new record;
+    tempVincitore.codiceFiscale = vincitore;
+    AppDataSource.manager.getRepository(record).findOne({
+        where: {
+            codiceFiscale: vincitore
+        }
+    }).then(x => {
+        tempVincitore.vittorie = x.vittorie + 1;
+        tempVincitore.pareggi = x.pareggi;
+        tempVincitore.sconfitte = x.sconfitte;
+    });
+    AppDataSource.manager.getRepository(record).delete(vincitore).then(() => 
+        AppDataSource.manager.getRepository(record).save(tempVincitore)
+    );
+    tempPerdente.codiceFiscale = perdente;
+    AppDataSource.manager.getRepository(record).findOne({
+        where: {
+            codiceFiscale: vincitore
+        }
+    }).then(x => {
+        tempPerdente.vittorie = x.vittorie;
+        tempPerdente.pareggi = x.pareggi;
+        tempPerdente.sconfitte = x.sconfitte + 1;
+    });
+    AppDataSource.manager.getRepository(record).delete(perdente).then(() => 
+        AppDataSource.manager.getRepository(record).save(tempPerdente)
+    );
+}
+
+const editRecordPareggio = (primoPart: string, secondoPart: string) => {
+    let tempPrimo = new record;
+    let tempSecondo = new record;
+    tempPrimo.codiceFiscale = primoPart;
+    AppDataSource.manager.getRepository(record).findOne({
+        where: {
+            codiceFiscale: primoPart
+        }
+    }).then(x => {
+        tempPrimo.vittorie = x.vittorie;
+        tempPrimo.pareggi = x.pareggi + 1;
+        tempPrimo.sconfitte = x.sconfitte;
+    });
+    AppDataSource.manager.getRepository(record).delete(primoPart).then(() => 
+        AppDataSource.manager.getRepository(record).save(tempPrimo)
+    );
+    tempSecondo.codiceFiscale = secondoPart;
+    AppDataSource.manager.getRepository(record).findOne({
+        where: {
+            codiceFiscale: secondoPart
+        }
+    }).then(x => {
+        tempSecondo.vittorie = x.vittorie;
+        tempSecondo.pareggi = x.pareggi + 1;
+        tempSecondo.sconfitte = x.sconfitte;
+    });
+    AppDataSource.manager.getRepository(record).delete(secondoPart).then(() => 
+        AppDataSource.manager.getRepository(record).save(tempSecondo)
+    )
+}
+
+const putScontro = async (jTemp: any, idEvento: number) => {
+    let temp = new scontro;
+    temp.categoria = jTemp.categoria;
+    temp.disciplina = jTemp.disciplina;
+    temp.idScontro = jTemp.numScontro;
+    temp.idEvento = idEvento;
+    temp.pagamentoExtra = jTemp.pagamento;
+    AppDataSource.manager.getRepository(scontro).save(temp);
+    putStoricoScontri(jTemp, idEvento);
+}
+
+const putEventoIIScontri = async (req: Request, res: Response, next: NextFunction) => {
+    let idEvento = ((await AppDataSource.manager.getRepository(evento).find()).length);
+    let scontroI = JSON.parse(req.params.scontroI.replace(":",""));
+    let scontroII = JSON.parse(req.params.scontroII.replace(":",""));
+    putEvento(JSON.parse(req.params.evento.replace(":","")), idEvento, scontroI.pagamento + scontroII.pagamento);
+    putScontro(scontroI, idEvento);
+    putScontro(scontroII, idEvento);
 };
 
-const putEvento3Scontri = async (req: Request, res: Response, next: NextFunction) => {
+const putEventoIIIScontri = async (req: Request, res: Response, next: NextFunction) => {
+    let idEvento = ((await AppDataSource.manager.getRepository(evento).find()).length);
+    let scontroI = JSON.parse(req.params.scontroI.replace(":",""));
+    let scontroII = JSON.parse(req.params.scontroII.replace(":",""));
+    let scontroIII = JSON.parse(req.params.scontroIII.replace(":",""));
+    putEvento(JSON.parse(req.params.evento.replace(":","")), idEvento, scontroI.pagamento + scontroII.pagamento
+        + scontroIII.pagamento);
+    putScontro(scontroI, idEvento);
+    putScontro(scontroII, idEvento);
+    putScontro(scontroIII, idEvento);
 };
 
-const putEvento4Scontri = async (req: Request, res: Response, next: NextFunction) => {
+const putEventoIVScontri = async (req: Request, res: Response, next: NextFunction) => {
+    let idEvento = ((await AppDataSource.manager.getRepository(evento).find()).length);
+    let scontroI = JSON.parse(req.params.scontroI.replace(":",""));
+    let scontroII = JSON.parse(req.params.scontroII.replace(":",""));
+    let scontroIII = JSON.parse(req.params.scontroIII.replace(":",""));
+    let scontroIV = JSON.parse(req.params.scontroIV.replace(":",""));
+    putEvento(JSON.parse(req.params.evento.replace(":","")), idEvento, scontroI.pagamento + scontroII.pagamento
+        + scontroIII.pagamento + scontroIV.pagamento);
+    putScontro(scontroI, idEvento);
+    putScontro(scontroII, idEvento);
+    putScontro(scontroIII, idEvento);
+    putScontro(scontroIV, idEvento);
 };
 
-const putEvento5Scontri = async (req: Request, res: Response, next: NextFunction) => {
+const putEventoVScontri = async (req: Request, res: Response, next: NextFunction) => {
+    let idEvento = ((await AppDataSource.manager.getRepository(evento).find()).length);
+    let scontroI = JSON.parse(req.params.scontroI.replace(":",""));
+    let scontroII = JSON.parse(req.params.scontroII.replace(":",""));
+    let scontroIII = JSON.parse(req.params.scontroIII.replace(":",""));
+    let scontroIV = JSON.parse(req.params.scontroIV.replace(":",""));
+    let scontroV = JSON.parse(req.params.scontroV.replace(":",""));
+    putEvento(JSON.parse(req.params.evento.replace(":","")), idEvento, scontroI.pagamento + scontroII.pagamento
+        + scontroIII.pagamento + scontroIV.pagamento + scontroV.pagamento);
+    putScontro(scontroI, idEvento);
+    putScontro(scontroII, idEvento);
+    putScontro(scontroIII, idEvento);
+    putScontro(scontroIV, idEvento);
+    putScontro(scontroV, idEvento);
 };
 
 export default { 
@@ -169,5 +360,5 @@ export default {
     getCategorie, getDiscipline,
     getTeams, putTeam, deleteTeam,
     getSponsor, putSponsor, deleteSponsor,
-    putEvento2Scontri, putEvento3Scontri, putEvento4Scontri, putEvento5Scontri
+    putEventoIIScontri, putEventoIIIScontri, putEventoIVScontri, putEventoVScontri
 };

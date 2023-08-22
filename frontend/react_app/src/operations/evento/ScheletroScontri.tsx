@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { GetElements } from "../common/Getter";
 import { Toast } from "primereact/toast";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
@@ -16,6 +16,7 @@ function ScheletroScontri(numScontro: number) {
     const [selectedSecondoPart, setSelectedSecondoPart] = useState(null);
     const [selectedPareggio, setSelectedPareggio] = useState(false);
     const [selectedVincitore, setSelectedVincitore] = useState(null);
+    const [selectedPagamento, setSelectedPagamento] = useState(null);
     const [isScontroSaved, setScontroSaved] = useState(false);
 
     const disciplineList = GetElements('/disciplina');
@@ -48,38 +49,36 @@ function ScheletroScontri(numScontro: number) {
 
     const accept = () => {
         if (selectedDiscipline === null || selectedCategoria === null || selectedPrimoPart === null || selectedSecondoPart === null ||
-            selectedPareggio? selectedPareggio === false: selectedVincitore === null) {
+            selectedPareggio? selectedPareggio === false: selectedVincitore === null || selectedPagamento === null) {
             toast.current?.show({ severity: 'error', summary: 'Confermato', detail: 'Dati non sufficienti', life: 3000 });
         } else {
+            const temp = {
+                numScontro: (numScontro - 1).toString(),
+                disciplina: selectedDiscipline,
+                categoria: selectedCategoria,
+                primoPart: selectedPrimoPart,
+                secondoPart: selectedSecondoPart,
+                pareggio: selectedPareggio,
+                vincitore: (selectedVincitore === "default")? null: selectedVincitore,
+                perdente: selectedPareggio? null: (selectedPrimoPart === selectedVincitore)? selectedSecondoPart: selectedPrimoPart,
+                pagamento: selectedPagamento
+            }
             switch(numScontro) {
                 case (1): 
-                    ScontroI(`/:${(numScontro - 1).toString()}/:${selectedDiscipline}/:${selectedCategoria}
-                        /:${selectedPrimoPart}/:${selectedSecondoPart}/:${selectedPareggio}
-                        /:${(selectedVincitore === "default")? null: selectedVincitore}
-                        /:${selectedPareggio? null: (selectedPrimoPart === selectedVincitore)? selectedSecondoPart: selectedPrimoPart}`);
+                    ScontroI(`/:${JSON.stringify(temp)}`);
                     setScontroSaved(true);
                     break;
                 case (2):
-                    ScontroII(`/:${(numScontro - 1).toString()}/:${selectedDiscipline}/:${selectedCategoria}
-                        /:${selectedPrimoPart}/:${selectedSecondoPart}/:${selectedPareggio}
-                        /:${(selectedVincitore === "default")? null: selectedVincitore}
-                        /:${selectedPareggio? null: (selectedPrimoPart === selectedVincitore)? selectedSecondoPart: selectedPrimoPart}`);
+                    ScontroII(`/:${JSON.stringify(temp)}`);
                     setScontroSaved(true);
                     break;
                 case (3):
-                    ScontroIII(`/:${(numScontro - 1).toString()}/:${selectedDiscipline}/:${selectedCategoria}
-                        /:${selectedPrimoPart}/:${selectedSecondoPart}/:${selectedPareggio}
-                        /:${(selectedVincitore === "default")? null: selectedVincitore}
-                        /:${selectedPareggio? null: (selectedPrimoPart === selectedVincitore)? selectedSecondoPart: selectedPrimoPart}`);
+                    ScontroIII(`/:${JSON.stringify(temp)}`);
                     setScontroSaved(true);
                     break;
                 case (4):
                     if (selectedScontroIII !== "") {
-                        ScontroIV(`/:${(numScontro - 1).toString()}/:${selectedDiscipline}/:${selectedCategoria}
-                            /:${selectedPrimoPart}/:${selectedSecondoPart}/:${selectedPareggio}
-                            /:${(selectedVincitore === "default")? null: selectedVincitore}
-                            /:${selectedPareggio? null: (selectedPrimoPart === selectedVincitore)? 
-                                selectedSecondoPart: selectedPrimoPart}`)
+                        ScontroIV(`/:${JSON.stringify(temp)}`);
                         setScontroSaved(true);
                     } else {
                         toast.current?.show({ severity: 'error', summary: 'Rifiutato', 
@@ -88,11 +87,7 @@ function ScheletroScontri(numScontro: number) {
                     break;
                 case (5):
                     if (selectedScontroIV !== "") {
-                        ScontroV(`/:${(numScontro - 1).toString()}/:${selectedDiscipline}/:${selectedCategoria}
-                            /:${selectedPrimoPart}/:${selectedSecondoPart}/:${selectedPareggio}
-                            /:${(selectedVincitore === "default")? null: selectedVincitore}
-                            /:${selectedPareggio? null: (selectedPrimoPart === selectedVincitore)? 
-                                selectedSecondoPart: selectedPrimoPart}`);
+                        ScontroV(`/:${JSON.stringify(temp)}`);
                         setScontroSaved(true);
                     } else {
                         toast.current?.show({ severity: 'error', summary: 'Rifiutato', 
@@ -191,6 +186,12 @@ function ScheletroScontri(numScontro: number) {
                             {selectedSecondoPart}
                         </option>
                     </select>
+                </div>
+                <div className="p-inputgroup flex-1">
+                    <InputNumber onChange={e => setSelectedPagamento(e.value)} placeholder={"Pagamento Extra"}/>
+                    <span className="p-inputgroup-addon">
+                        <i className="pi pi-euro"></i>
+                    </span>
                 </div>
             </div>
             <Toast ref={toast} />

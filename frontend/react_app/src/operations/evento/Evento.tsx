@@ -30,14 +30,12 @@ const ScontroIII = (ScontroRicevuto: string) => {
     selectedScontroIII = ScontroRicevuto;
 }
 const ScontroIV = (ScontroRicevuto: string) => {
-    if (selectedScontroIII === "") {
-    } else {
+    if (selectedScontroIII !== "") {
         selectedScontroIV = ScontroRicevuto; 
     }
 }
 const ScontroV = (ScontroRicevuto: string) => {
-    if (selectedScontroIV === "") {
-    } else {
+    if (selectedScontroIV !== "") {
         selectedScontroV = ScontroRicevuto;
     }
 }
@@ -72,27 +70,32 @@ export default function Lottatore() {
                     selectedStandardNumber === "" || selectedScontroI === "" || selectedScontroII === "") {
                 toast.current?.show({ severity: 'error', summary: 'Confermato', detail: 'Dati non sufficienti', life: 3000 });
             } else {
+                const temp = {
+                    stadio: selectedStadiumName,
+                    countrie: selectedCountrie,
+                    rent: selectedRentPrice,
+                    staff: selectedStaffPrice,
+                    start: new Date(selectedTimeStart).getHours() + ":" + new Date(selectedTimeStart).getMinutes(),
+                    end: new Date(selectedTimeEnd).getHours() + ":" + new Date(selectedTimeEnd).getMinutes(),
+                    date: date,
+                    firstSpo: selectedFirstSponsor === "default"? null: selectedFirstSponsor,
+                    secondSpo: selectedSecondSponsor === "default"? null: selectedSecondSponsor,
+                    thirdSpo: selectedThirdSponsor === "default"? null: selectedThirdSponsor,
+                    standNum: selectedStandardNumber,
+                    standPrice: selectedStandardPrice,
+                    premNum: selectedPremiumNumber,
+                    premPrice: selectedPremiumPrice
+                };
+                console.log(temp);
                 if (selectedScontroIII === "" && selectedScontroIV === "" && selectedScontroV === "") {
-                    client.get(`/evento/aggiungi/:${selectedStadiumName}/:${selectedCountrie}/:${selectedRentPrice}
-                        /:${selectedStaffPrice}/:${selectedTimeStart}/:${selectedTimeEnd}/:${date}/:${selectedFirstSponsor}
-                        /:${selectedSecondSponsor}/:${selectedThirdSponsor}/:${selectedStandardNumber}/:${selectedStandardPrice}
-                        /:${selectedPremiumNumber}/:${selectedPremiumPrice}${selectedScontroI}${selectedScontroII}`);
+                    client.get(`/evento/aggiungi/:${JSON.stringify(temp)}${selectedScontroI}${selectedScontroII}`);
                 } else if (selectedScontroIV === "" && selectedScontroV === "") {
-                    client.get(`/evento/aggiungi/:${selectedStadiumName}/:${selectedCountrie}/:${selectedRentPrice}
-                        /:${selectedStaffPrice}/:${selectedTimeStart}/:${selectedTimeEnd}/:${date}/:${selectedFirstSponsor}
-                        /:${selectedSecondSponsor}/:${selectedThirdSponsor}/:${selectedStandardNumber}/:${selectedStandardPrice}
-                        /:${selectedPremiumNumber}/:${selectedPremiumPrice}${selectedScontroI}${selectedScontroII}${selectedScontroIII}`);
+                    client.get(`/evento/aggiungi/:${JSON.stringify(temp)}${selectedScontroI}${selectedScontroII}${selectedScontroIII}`);
                 } else if (selectedScontroV === "") {
-                    client.get(`/evento/aggiungi/:${selectedStadiumName}/:${selectedCountrie}/:${selectedRentPrice}
-                        /:${selectedStaffPrice}/:${selectedTimeStart}/:${selectedTimeEnd}/:${date}/:${selectedFirstSponsor}
-                        /:${selectedSecondSponsor}/:${selectedThirdSponsor}/:${selectedStandardNumber}/:${selectedStandardPrice}
-                        /:${selectedPremiumNumber}/:${selectedPremiumPrice}${selectedScontroI}${selectedScontroII}${selectedScontroIII}
+                    client.get(`/evento/aggiungi/:${JSON.stringify(temp)}${selectedScontroI}${selectedScontroII}${selectedScontroIII}
                         ${selectedScontroIV}`);
                 } else {
-                    client.get(`/evento/aggiungi/:${selectedStadiumName}/:${selectedCountrie}/:${selectedRentPrice}
-                        /:${selectedStaffPrice}/:${selectedTimeStart}/:${selectedTimeEnd}/:${date}/:${selectedFirstSponsor}
-                        /:${selectedSecondSponsor}/:${selectedThirdSponsor}/:${selectedStandardNumber}/:${selectedStandardPrice}
-                        /:${selectedPremiumNumber}/:${selectedPremiumPrice}${selectedScontroI}${selectedScontroII}${selectedScontroIII}
+                    client.get(`/evento/aggiungi/:${JSON.stringify(temp)}${selectedScontroI}${selectedScontroII}${selectedScontroIII}
                         ${selectedScontroIV}${selectedScontroV}`);
                 }
 
