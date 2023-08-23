@@ -53,6 +53,7 @@ const insertClassifica = (temp: lottatore) => {
         temp.categoria = "PesiMassimi";
         AppDataSource.manager.getRepository(classifica_massimi).save(classifica);
     }
+    return temp.categoria;
 }
 
 const putLottatore = async (req: Request, res: Response, next: NextFunction) => {
@@ -63,7 +64,7 @@ const putLottatore = async (req: Request, res: Response, next: NextFunction) => 
     temp.codiceFiscale = req.params.cf.replace(":","").trim();
     temp.arteMarziale = req.params.disciplina.replace(":","");
     temp.peso = parseInt(req.params.peso.replace(":",""));
-    insertClassifica(temp);
+    temp.categoria = insertClassifica(temp);
     temp.team = req.params.team.replace(":","");
     temp.dataNascita = new Date(req.params.nascita.replace(":",""));
     AppDataSource.manager.save(temp);
@@ -75,10 +76,81 @@ const putLottatore = async (req: Request, res: Response, next: NextFunction) => 
     AppDataSource.manager.getRepository(record).save(tempRecord); 
 };
 
+const insertClassificaEdit = (temp: lottatore) => {
+    let classifica = new classifica_piuma;
+    classifica.arteMarziale = temp.arteMarziale;
+    classifica.codiceFiscale = temp.codiceFiscale;
+    classifica.cognome = temp.cognome;
+    classifica.nome = temp.nome;
+    classifica.peso = temp.peso;
+    if (temp.peso <= 65) {
+        temp.categoria = "PesoPiuma";
+        AppDataSource.manager.getRepository(classifica_piuma).delete(classifica.codiceFiscale).then(() => 
+            AppDataSource.manager.getRepository(classifica_piuma).save(classifica)
+        )
+    } else if (temp.peso > 65 && temp.peso <= 77) {
+        temp.categoria = "Welterweight";
+        AppDataSource.manager.getRepository(classifica_welterweight).delete(classifica.codiceFiscale).then(() => 
+            AppDataSource.manager.getRepository(classifica_welterweight).save(classifica)
+        )
+    } else if (temp.peso > 77 && temp.peso <= 84) {
+        temp.categoria = "PesoMedio";
+        AppDataSource.manager.getRepository(classifica_medio).delete(classifica.codiceFiscale).then(() => 
+            AppDataSource.manager.getRepository(classifica_medio).save(classifica)
+        )
+    } else {
+        temp.categoria = "PesiMassimi";
+        AppDataSource.manager.getRepository(classifica_massimi).delete(classifica.codiceFiscale).then(() => 
+            AppDataSource.manager.getRepository(classifica_massimi).save(classifica)
+        )
+    }
+    return temp.categoria;
+}
+
+const editLottatore = async (req: Request, res: Response, next: NextFunction) => {
+
+    let tempLottatore = JSON.parse(req.params.tempLottatore.replace(":",""));
+    let temp = new lottatore;
+    console.log(tempLottatore);
+    temp.nome = tempLottatore.nome;
+    temp.cognome = tempLottatore.cognome;
+    temp.codiceFiscale = tempLottatore.cf;
+    temp.arteMarziale = tempLottatore.disciplina;
+    temp.peso = tempLottatore.peso;
+    temp.categoria = insertClassificaEdit(temp);
+    temp.team = tempLottatore.team;
+    temp.dataNascita = new Date(tempLottatore.date);
+    AppDataSource.manager.getRepository(lottatore).delete(temp.codiceFiscale).then(() => 
+        AppDataSource.manager.getRepository(lottatore).save(temp)
+    );
+    let tempRecord = new record;
+    tempRecord = JSON.parse(req.params.tempRecord.replace(":",""));
+    tempRecord.codiceFiscale = tempLottatore.cf;
+    console.log(tempRecord);
+    tempRecord.vittorie = tempRecord.vittorie;
+    tempRecord.sconfitte = tempRecord.sconfitte;
+    tempRecord.pareggi = tempRecord.pareggi;
+    console.log(tempRecord.codiceFiscale);
+    AppDataSource.manager.getRepository(record).delete(tempRecord.codiceFiscale).then(() => 
+        AppDataSource.manager.getRepository(record).save(tempRecord)
+    );
+};
+
 const deleteLottatore = async (req: Request, res: Response, next: NextFunction) => {
     let codiceFiscale = req.params.cf.replace(":","");
     AppDataSource.manager.getRepository(lottatore).delete(codiceFiscale);
     AppDataSource.manager.getRepository(record).delete(codiceFiscale);
+};
+
+const getRecord = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(record).find();
+    let temp: string;
+    (await result).forEach(x => {
+        if ( x.codiceFiscale === req.params.cf.replace(":", "") ) {
+            temp = JSON.stringify(x);
+        }
+    });
+    return res.json(temp);
 };
 
 const getCategorie = async (req: Request, res: Response, next: NextFunction) => {
@@ -355,10 +427,115 @@ const putEventoVScontri = async (req: Request, res: Response, next: NextFunction
     putScontro(scontroV, idEvento);
 };
 
+const getPesoPiuma = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(classifica_piuma).find();
+    let resultRecord = AppDataSource.manager.getRepository(record).find();
+    let tempRecord = [];
+    (await resultRecord).forEach(x => tempRecord.push(x));
+    let classifica = [];
+    (await result).forEach(x => {
+        tempRecord.filter(y => y.codiceFiscale === x.codiceFiscale).forEach(a => {
+            let temp = {
+                nome: x.nome,
+                cognome: x.cognome,
+                cf: x.codiceFiscale,
+                peso: x.peso,
+                arteMarziale: x.arteMarziale,
+                vittorie: a.vittorie,
+                sconfitte: a.sconfitte,
+                pareggi: a.pareggi,
+                punteggio: ((a.vittorie * 3) + a.pareggi)
+            }
+            classifica.push(JSON.stringify(temp)); 
+
+        });
+    });
+    return res.json(classifica);
+};
+
+const getWelterWeight = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(classifica_welterweight).find();
+    let resultRecord = AppDataSource.manager.getRepository(record).find();
+    let tempRecord = [];
+    (await resultRecord).forEach(x => tempRecord.push(x));
+    let classifica = [];
+    (await result).forEach(x => {
+        tempRecord.filter(y => y.codiceFiscale === x.codiceFiscale).forEach(a => {
+            let temp = {
+                nome: x.nome,
+                cognome: x.cognome,
+                cf: x.codiceFiscale,
+                peso: x.peso,
+                arteMarziale: x.arteMarziale,
+                vittorie: a.vittorie,
+                sconfitte: a.sconfitte,
+                pareggi: a.pareggi,
+                punteggio: ((a.vittorie * 3) + a.pareggi)
+            }
+            classifica.push(JSON.stringify(temp)); 
+
+        });
+    });
+    return res.json(classifica);
+};
+
+const getPesoMedio = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(classifica_medio).find();
+    let resultRecord = AppDataSource.manager.getRepository(record).find();
+    let tempRecord = [];
+    (await resultRecord).forEach(x => tempRecord.push(x));
+    let classifica = [];
+    (await result).forEach(x => {
+        tempRecord.filter(y => y.codiceFiscale === x.codiceFiscale).forEach(a => {
+            let temp = {
+                nome: x.nome,
+                cognome: x.cognome,
+                cf: x.codiceFiscale,
+                peso: x.peso,
+                arteMarziale: x.arteMarziale,
+                vittorie: a.vittorie,
+                sconfitte: a.sconfitte,
+                pareggi: a.pareggi,
+                punteggio: ((a.vittorie * 3) + a.pareggi)
+            }
+            classifica.push(JSON.stringify(temp)); 
+
+        });
+    });
+    return res.json(classifica);
+};
+
+const getPesiMassimi = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(classifica_massimi).find();
+    let resultRecord = AppDataSource.manager.getRepository(record).find();
+    let tempRecord = [];
+    (await resultRecord).forEach(x => tempRecord.push(x));
+    let classifica = [];
+    (await result).forEach(x => {
+        tempRecord.filter(y => y.codiceFiscale === x.codiceFiscale).forEach(a => {
+            let temp = {
+                nome: x.nome,
+                cognome: x.cognome,
+                cf: x.codiceFiscale,
+                peso: x.peso,
+                arteMarziale: x.arteMarziale,
+                vittorie: a.vittorie,
+                sconfitte: a.sconfitte,
+                pareggi: a.pareggi,
+                punteggio: ((a.vittorie * 3) + a.pareggi)
+            }
+            classifica.push(JSON.stringify(temp)); 
+
+        });
+    });
+    return res.json(classifica);
+};
+
 export default { 
-    getLottatori, getFiltedLottatori, putLottatore, deleteLottatore,
-    getCategorie, getDiscipline,
+    getLottatori, getFiltedLottatori, putLottatore, deleteLottatore, editLottatore,
+    getCategorie, getDiscipline, getRecord,
     getTeams, putTeam, deleteTeam,
     getSponsor, putSponsor, deleteSponsor,
-    putEventoIIScontri, putEventoIIIScontri, putEventoIVScontri, putEventoVScontri
+    putEventoIIScontri, putEventoIIIScontri, putEventoIVScontri, putEventoVScontri, 
+    getPesoPiuma, getWelterWeight, getPesoMedio, getPesiMassimi
 };

@@ -5,7 +5,9 @@ const router = express.Router();
 router.get('/lottatore', controller.getLottatori);
 router.get('/lottatore/complete', controller.getFiltedLottatori);
 router.get('/lottatore/aggiungi/:nome/:cognome/:cf/:nascita/:peso/:team/:disciplina', controller.putLottatore);
+router.get('/lottatore/modifica/:tempLottatore/:tempRecord', controller.editLottatore);
 router.get('/lottatore/rimuovi/:cf', controller.deleteLottatore);
+router.get('/record/:cf', controller.getRecord);
 router.get('/categoria', controller.getCategorie);
 router.get('/disciplina', controller.getDiscipline);
 router.get('/team', controller.getTeams);
@@ -18,5 +20,9 @@ router.get('/evento/aggiungi/:evento/:scontroI/:scontroII', controller.putEvento
 router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII', controller.putEventoIIIScontri);
 router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroIV', controller.putEventoIVScontri);
 router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroVI/:scontroV', controller.putEventoVScontri);
+router.get('/pesoPiuma', controller.getPesoPiuma);
+router.get('/welterWeight', controller.getWelterWeight);
+router.get('/pesoMedio', controller.getPesoMedio);
+router.get('/pesiMassimi', controller.getPesiMassimi);
 
 export = router;

@@ -15,6 +15,7 @@ import Lottatore from './operations/lottatore/Lottatore';
 import Team from './operations/team/Team';
 import Sponsor from './operations/sponsor/Sponsor';
 import Evento from './operations/evento/Evento';
+import EditLottatore from './operations/editLottatore/EditLottatore';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -30,6 +31,7 @@ root.render(
         <Route path='Operations/Team' element={<Team />} />
         <Route path='Operations/Sponsor' element={<Sponsor />} />
         <Route path='Operations/Evento' element={<Evento />} />
+        <Route path='Operations/LottatoreEdit' element={<EditLottatore />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

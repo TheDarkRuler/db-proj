@@ -75,7 +75,7 @@ function ModificaLottatore() {
 
     let navigate = useNavigate(); 
     const routeChange = () => { 
-        let path = `/`;
+        let path = `/Operations/LottatoreEdit`;
         navigate(path, {replace: true});
     }
     

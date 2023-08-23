@@ -32,7 +32,7 @@ function StatisticsButton() {
   return (
     <div className='MyButton' onClick={routeChange}>
       <span> 
-        Statistiche      
+        Visualizza Classifiche      
       </span>
     </div>
   );
