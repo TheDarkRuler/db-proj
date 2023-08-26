@@ -3,10 +3,16 @@ FIGHT_ON
 Per eseguire l'applicazione sarà necessrio aver installato node.js: https://nodejs.org/en/ 
 Come DBMS invece, è stato utilizzato mysql.
 
-In seguito all'installazione di node, sarà necessario installare varie dipendenze, per farlo basterà eseguire i comandi (nella root del progetto):
+In seguito all'installazione di node, sarà necessario installare varie dipendenze, per farlo basterà eseguire i comandi:
 
-* npm i
-* npm i nodemon react-scripts
+-Nella root del progetto:
+
+    * npm i unique-names-generator
+    (questo servirà per generare nomi randomici per popolare il database in maniera automatica).
+
+-Sia in "frontend/react_app" che in "backend/MySQLProject":
+
+    *npm i
 
 Successivamente bisognerà accedere manualmente alla cartella "backend/MySQLProject" e aprire il file "ormconfig.json" dove si dovranno modificare le voci { "host", "port", "username", "password" e "database" }
 in base alle proprie esigenze, stesse modifiche andranno poi applicate anche in "index.ts" presente nella cartella "src" ( partendo sempre da backend ), in particolare bisognerà modificare i parametri
