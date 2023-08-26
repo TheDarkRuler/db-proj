@@ -330,6 +330,291 @@ Concludo quindi che devo preservare la ridondanza.
 
 \section{Traduzione di entità e associazioni in relazioni}
 
+Lottatore(\underline{codice\textunderscore fiscale}, nome, cognome, 
+data\textunderscore nascita, peso, team, arteMarziale, id\textunderscore team, categoria, usernameAmm) $\\$
+fk: arteMarziale references Disciplina $\\$
+fk: usernameAmm references Amministratore $\\$
+fk: id\textunderscore team references Team $\\$
+fk: categoria references Categoria $\\$
+$\\$
+Team(\underline{id\textunderscore team}, nome, nome\textunderscore responsabile, origine, usernameAmm) $\\$
+fk: usernameAmm references Amministratore $\\$
+$\\$
+Amministratore(\underline{username}) $\\$
+$\\$
+Sponsorizzazioni(\underline{id\textunderscore sponsor}, nome, pagamento\textunderscore sponsor, usernameAmm) $\\$
+fk: usernameAmm references Amministratore $\\$
+$\\$
+Evento(\underline{id\textunderscore evento}, id\textunderscore sponsorPubbl, id\textunderscore sponsorContr, nome\textunderscore stadio, 
+luogo, costo\textunderscore noleggio, spesa\textunderscore staff, data, ora\textunderscore inizio, ora\textunderscore fine, 
+sponsor1, sponsor2, sponsor3, biglietti\textunderscore standard\textunderscore venduti, biglietti\textunderscore premium\textunderscore venduti, 
+costo\textunderscore biglietti\textunderscore standard, costo\textunderscore biglietti\textunderscore premium, usernameAmm) $\\$
+fk: usernameAmm references Amministratore $\\$
+fk: (id\textunderscore sponsorPubbl, id\textunderscore sponsorContr) references Sponsorizzazioni $\\$
+$\\$
+Storico\textunderscore Eventi(\underline{id\textunderscore storicoEventi, id\textunderscore evento}, introiti, 
+spese, guadagni\textunderscore conplessivi)
+fk: id\textunderscore evento references Evento $\\$
+$\\$
+Scontro(\underline{id\textunderscore scontro, id\textunderscore evento}, disciplina, categoria, pagamento\textunderscore extra, 
+codice\textunderscore fiscalePart, codice\textunderscore fiscalePaga) $\\$
+fk: id\textunderscore evento references Evento $\\$
+fk: (codice\textunderscore fiscalePart, codice\textunderscore fiscalePaga) references Lottatore $\\$
+$\\$
+Storico\textunderscore Scontri(\underline{id\textunderscore storicoScontri, id\textunderscore scontro}, id\textunderscore evento, 
+primo\textunderscore partecipante, secondo\textunderscore partecipante, vincitore, perdente, pareggio) $\\$
+fk: (id\textunderscore evento, id\textunderscore scontro) references Scontro $\\$
+$\\$
+Categoria(\underline{nome}, peso\textunderscore minimo, peso\textunderscore massimo) $\\$
+$\\$
+Disciplina(\underline{nome}) $\\$
+$\\$
+Classifica(nome, cognome, \underline{codice\textunderscore fiscale}, peso, arte\textunderscore marziale, categoria) $\\$
+fk: categoria references Categoria $\\$
+fk: codice\textunderscore fiscale references Record $\\$
+$\\$
+Record(\underline{codice\textunderscore fiscale}, vittorie, sconfitte, pareggi) $\\$
+fk: codice\textunderscore fiscale references Lottatore $\\$
+
+\section{Schema relazionale finale}
+\includegraphics[scale=0.7, angle=90]{./img/schema_rel_finale.png}
+
+\section{Traduzione operazioni in query SQL}
+\subsection{Creazione tabelle}
+\begin{verbatim}
+CREATE TABLE AMMINISTRATORE (
+    username varchar(30) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE LOTTATORE ( 
+    codiceFiscale varchar(50) NOT NULL,
+    nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    dataNascita date NOT NULL,
+    team varchar(40), 
+    peso float NOT NULL, 
+    categoria varchar(20) NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL, 
+    PRIMARY KEY (codiceFiscale) 
+); 
+
+CREATE TABLE TEAM (
+    idTeam integer NOT NULL,
+    nome varchar(50) NOT NULL,
+    nome_responsabile varchar(20),
+    origine varchar(40),
+    PRIMARY KEY (idTeam)
+);
+
+CREATE TABLE RECORD (
+    codiceFiscale varchar(50) NOT NULL,
+    vittorie integer,
+    sconfitte integer,
+    pareggi integer,
+    PRIMARY KEY (codiceFiscale)
+);
+
+CREATE TABLE CLASSIFICA_PIUMA (
+    codiceFiscale varchar(50) NOT NULL,
+    nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
+    PRIMARY KEY (codiceFiscale)
+);
+
+CREATE TABLE CLASSIFICA_WELTERWEIGHT (
+    codiceFiscale varchar(50) NOT NULL,
+    nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
+    PRIMARY KEY (codiceFiscale)
+);
+
+CREATE TABLE CLASSIFICA_MEDIO (
+    codiceFiscale varchar(50) NOT NULL,
+    nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
+    PRIMARY KEY (codiceFiscale)
+);
+
+CREATE TABLE CLASSIFICA_MASSIMI (
+    codiceFiscale varchar(50) NOT NULL,
+    nome varchar(20) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    peso float NOT NULL,
+    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
+    PRIMARY KEY (codiceFiscale)
+);
+
+CREATE TABLE DISCIPLINA (
+    nome ENUM('BJJ','MMA','MuayThai') PRIMARY KEY
+);
+
+CREATE TABLE CATEGORIA (
+    nome ENUM('PesoPiuma','Welterweight',
+            'PesoMedio','PesiMassimi') PRIMARY KEY,
+    pesoMinimo integer,
+    pesiMassimi integer 
+);
+
+CREATE TABLE SCONTRO (
+    idEvento integer NOT NULL,
+    idScontro integer NOT NULL,
+    disciplina ENUM('BJJ','MMA','MuayThai'),
+    categoria ENUM('PesoPiuma','Welterweight',
+                    'PesoMedio','PesiMassimi'),
+    pagamentoExtra float,
+    PRIMARY KEY (idEvento, idScontro)
+);
+
+CREATE TABLE STORICO_SCONTRI (
+    idEvento integer NOT NULL,
+    idScontro integer NOT NULL,
+    primoPartecipante varchar(50) NOT NULL,
+    secondoPartecipante varchar(50) NOT NULL,
+    vincitore varchar(50),
+    perdente varchar(50),
+    pareggio bool,
+    PRIMARY KEY (idScontro, idEvento),
+    CONSTRAINT PAREGGIO CHECK 
+        ((pareggio IS TRUE AND vincitore IS NULL 
+        AND perdente IS NULL) OR
+        (pareggio IS FALSE AND vincitore IS NOT NULL 
+        AND perdente IS NOT NULL))
+);
+
+CREATE TABLE EVENTO (
+    idEvento integer NOT NULL,
+    nomeStadio varchar(40) NOT NULL,
+    luogo varchar (50) NOT NULL,
+    costoNoleggio float,
+    spesaStaff float,
+    dataEvento date NOT NULL,
+    oraInizio varchar(10) NOT NULL,
+    oraFine varchar(10) NOT NULL,
+    bigliettiStandardVenduti integer,
+    bigliettiPremiumVenduti integer,
+    costoBigliettiPremium integer,
+    costoBigliettiStandard integer,
+    sponsor JSON,
+    PRIMARY KEY (idEvento),
+    CONSTRAINT ORARIO CHECK (oraInizio <= oraFine)
+);
+
+CREATE TABLE SPONSORIZZAZIONI (
+    idSponsor integer NOT NULL,
+    nome varchar(40) NOT NULL,
+    pagamentoSponsor float,
+    PRIMARY KEY (idSponsor)
+);
+
+CREATE TABLE STORICO_EVENTI (
+    idEvento integer NOT NULL,
+    introiti float,
+    spese float,
+    guadagniComplessivi float,
+    PRIMARY KEY (idEvento)
+);
+\end{verbatim}
+\subsection{Operazioni amministratore}
+\subsubsection{Aggiungere lottatore}
+\begin{verbatim}
+INSERT INTO LOTTATORE (nome, cognome, codiceFiscale, 
+dataNascita, team, peso, categoria, arteMarziale)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Aggiungere Record --
+
+INSERT INTO RECORD (idRecord, vittorie, sconfitte, pareggi)
+	VALUES (?, 0, 0, 0);
+
+-- Aggiungere classifica --
+
+INSERT INTO CLASSIFICA (nome, cognome, codiceFiscale, peso, 
+arteMarziale)
+    VALUES (?, ?, ?, ?, ?);
+
+\end{verbatim}
+\textsl{P.S: In questo caso inserisco il lottatore nella tabella 'classifica' che non esiste per comodità, 
+nell'applicazione invece sarà presente un controllo che farà in modo che il partecipante venga 
+inserito nella classifica giusta in base al suo peso.}
+
+\subsubsection{Rimuovere lottatore}
+\begin{verbatim}
+DELETE FROM LOTTATORE
+    WHERE codiceFiscale = ?
+
+-- Elimina il record corrispondente --
+
+DELETE FROM RECORD
+    WHERE codiceFiscale = ?
+
+-- Elimina l'elemento in classifica
+
+DELETE FROM CLASSIFICA
+    WHERE codiceFiscale = ?
+\end{verbatim}
+\textsl{P.S: vale la stessa cosa che ho detto prima per l'aggiunta classifica.}
+\subsubsection{Aggiungere team}
+\begin{verbatim}
+INSERT INTO TEAM (idTeam, nome, nome_responsabile, origine)
+	VALUES(?, ?, ?, ?);
+\end{verbatim}
+\subsubsection{Rimuovere team}
+\begin{verbatim}
+DELETE FROM TEAM 
+    WHERE idTeam = ?
+\end{verbatim}
+\subsubsection{Aggiungere sponsor}
+\begin{verbatim}
+INSERT INTO SPONSORIZZAZIONI(idSponsor, nome, pagamentoSponsor)
+	VALUES (?, ?, ?);
+\end{verbatim}
+\subsubsection{Rimuovere sponsor}
+\begin{verbatim}
+DELETE FROM SPONSORIZZAZIONI
+    WHERE idSponsor = ?
+\end{verbatim}
+\subsubsection{Registrare evento}
+\begin{verbatim}
+INSERT INTO EVENTO (idEVento, nomeStadio, luogo, costoNoleggio,
+spesaStaff, dataEvento, oraInizio, oraFine, 
+bigliettiStandardVenduti, bigliettiPremiumVenduti, 
+costoBigliettiStandard, costoBigliettiPremium, sponsor)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Inserire evento in storicoEventi --
+
+INSERT INTO STORICO_EVENTI (idEvento, introiti, spese, 
+guadagniComplessivi)
+	VALUES (?, ?, ?, ?);
+
+-- Aggiungere Scontro (2-5 volte, in base al tipo di evento) --
+
+INSERT INTO SCONTRO (idEvento, idScontro, disciplina, 
+categoria, pagamentoExtra)
+	VALUES (?, ?, ?, ?, ?);
+
+-- Inserire Scontro nello storicoScontri --
+
+INSERT INTO STORICO_SCONTRI (idEvento, idScontro, 
+primoPartecipante, secondoPartecipante, vincitore, 
+perdente, pareggio)
+	VALUES (?, ?, ?, ?, ?, ?, ?);
+\end{verbatim}
+\subsubsection{Modificare lottatore}
+\begin{verbatim}
+    
+\end{verbatim}
+\subsubsection{Visualizzare classifiche}
+\begin{verbatim}
+    
+\end{verbatim}
+
 
 
 \end{document}
