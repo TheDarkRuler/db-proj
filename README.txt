@@ -1,4 +1,4 @@
-# Fight_on
+FIGHT_ON
 -- INIZIALIZZAZIONE:  
 Per eseguire l'applicazione sarà necessrio aver installato node.js: https://nodejs.org/en/ 
 Come DBMS invece, è stato utilizzato mysql.
