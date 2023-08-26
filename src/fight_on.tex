@@ -634,14 +634,14 @@ ORDER BY (r.vittoria * 3 + r.pareggio) DESC;
 
 \chapter{Progettazione dell'applicazione}
 \section{Descrizione dell'architettura dell'applicazione realizzata}
-L'applicazione che permette di gestire il database è stata creata utilizzando Typescript in combinazione con il framework \emph{React}, 
-mentre per quanto riguarda il database, esso risiede in locale ed è stato sviluppato usando \emph{MySQL}.
+L'applicazione che permette di gestire il database è stata creata utilizzando \textrm{Typescript} in combinazione con il framework 
+\emph{React}, mentre per quanto riguarda il database, esso risiede in locale ed è stato sviluppato usando \emph{MySQL}.
 L'applicazione è un'applicazione web che si appoggia a un server locale. Essa consente quindi la possibilità di connettere 
 frontend e backend utilizzando il protocollo \textbf{HTTP}, e quindi attraverso delle \textbf{API REST}. Grazie a un server locale, 
 il backend avrà la possibilità di ricevere richieste dal frontend, portando con sé parametri e restituendo valori, il tutto 
 evitando una connessione diretta tramite codice. Questo design permette all'applicazione di avere una scalabilità maggiore, eliminando 
 eventuali dipendenze tra frontend e backend. Inoltre, per la gestione del database da parte del backend, si utilizza la libreria 
-\emph{TypeORM} di TypeScript. Libreria che permette di eseguire operazioni sui dati mediante codice.
+\emph{TypeORM} di \textrm{Typescript}. Libreria che permette di eseguire operazioni sui dati mediante codice.
 
 
 \end{document}
