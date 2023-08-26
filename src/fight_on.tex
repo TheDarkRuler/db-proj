@@ -32,7 +32,7 @@ e in caso le \textbf{classifiche}.
 \section{Intervista}
 A seguito di una prima intervista si sono ottenute le seguenti richieste:\medskip
 
-Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, data di nascita, peso e \textbf{arte 
+Per ogni partecipante alla lega bisogna tenere traccia del nome, cognome, codice fiscale, data di nascita, team, peso e \textbf{arte 
 marziale} in cui vuole lottare. Alla iscrizione di un nuovo lottatore esso verrà inserito all'ultimo 
 posto nella classifica della propria categoria. Ci sarà la possibilità di registrare i \textbf{team} dei combattenti tenendo traccia di: nome, amministratore e 
 origine. Saranno presenti diverse classifiche per ogni tipo di categoria dove i lottatori saranno ordinati 
@@ -44,11 +44,12 @@ seguanti: \textit{MMA} (Mixed Martial Arts), \textit{BJJ} (Brazial Jiu Jitsu) e 
 partecipante dovrà essere inserita la disciplina di competenza possibilmente modificabile in futuro (sarà gestito in maniera 
 analoga il peso). Inoltre, partecipanti appartenenti a una determinata categoria potranno scontrarsi solo con altri membri 
 della stessa. Gli eventi saranno constituiti da almeno 2 combattimenti ciascuno, bisognerà tener traccia del: nome dello stadio, 
-luogo (indirizzo), costo noleggio stadio, spesa staff, data, orario inizio, orario fine, biglietti standard venduti, biglietti 
-premium venduti, introiti netti, inoltre sarà necessario poter associare a un evento degli sponsor selezionabili tra quelli disponibili 
-che hanno effettuato un contratto con la lega. Ogni lottatore partecipante riceverà un pagamento extra e verrà calcolata una quantità di guadagni 
-tramite pubblicità, tutto in base al numero di biglietti venduti per l'evento, così da poter calcolare gli introiti dell'evento, 
-il quale verrà aggiunto in una \textsc{History} dove saranno immagazzinati tutti gli eventi passati.
+luogo (nazione), costo noleggio stadio, spesa staff, data, orario inizio, orario fine, biglietti standard venduti, biglietti 
+premium venduti, costo biglietti standard, costo biglietti premium, introiti netti, inoltre sarà necessario poter associare a un 
+evento degli sponsor selezionabili tra quelli disponibili che hanno effettuato un contratto con la lega. Ogni lottatore partecipante 
+riceverà un pagamento extra e verrà calcolata una quantità di guadagni tramite pubblicità, tutto in base al numero di biglietti 
+venduti per l'evento, così da poter calcolare gli introiti dell'evento, il quale verrà aggiunto in una \textsc{History} dove saranno 
+immagazzinati tutti gli eventi passati.
 
 \section{Definizioni}
 \begin{itemize}
@@ -89,11 +90,10 @@ di categorie diverse non possono combattere.
 
 \section{Evento}
 Gli eventi sono il principale elemento della lega dal quale proviene il profitto di quest'ultima. Quindi, è importante 
-tenerne traccia con un entità "Storico\textunderscore eventi" per poi realizzare a livello di frontend un grafico mostrante 
-i guadagni generali, inoltre ogni evento potrà essere sponsorizzato da uno o più sponsor registrati nella lega.
+tenerne traccia con un entità "Storico\textunderscore eventi", inoltre ogni evento potrà essere sponsorizzato da uno o più sponsor registrati nella lega.
 
 \section{Scontro}
-Gli scontri constituiscono gli eveti e sono formati da due lottatori della stessa categoria, è importante anche che i due partecipanti 
+Gli scontri constituiscono gli eventi e sono formati da due lottatori della stessa categoria, è importante anche che i due partecipanti 
 a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
 
 \section{Schema concettuale finale}
@@ -155,8 +155,12 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     Concetto          & Costrutto & Accessi & Tipo \\ \hline
     AMMINISTRATORE    & E         & 1       & R    \\ \hline
     LOTTATORE         & E         & 1       & W    \\ \hline
+    RECORD            & E         & 1       & W    \\ \hline
+    CLASSIFICA        & E         & 1       & W    \\ \hline
+    DETIENE           & A         & 1       & W    \\ \hline
+    CONSTITUISCE      & A         & 1       & W    \\ \hline
     GESTISCE          & A         & 1       & R    \\ \hline
-    \textit{TOTALE}   &           & 4       &      \\ \hline
+    \textit{TOTALE}   &           & 12       &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -168,8 +172,12 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     Concetto          & Costrutto & Accessi & Tipo \\ \hline
     AMMINISTRATORE    & E         & 1       & R    \\ \hline
     LOTTATORE         & E         & 1       & W    \\ \hline
+    RECORD            & E         & 1       & W    \\ \hline
+    CLASSIFICA        & E         & 1       & W    \\ \hline
+    DETIENE           & A         & 1       & W    \\ \hline
+    CONSTITUISCE      & A         & 1       & W    \\ \hline
     GESTISCE          & A         & 1       & R    \\ \hline
-    \textit{TOTALE}   &           & 4       &      \\ \hline
+    \textit{TOTALE}   &           & 12      &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -234,8 +242,10 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     Concetto                             & Costrutto & Accessi & Tipo \\ \hline
     CLASSIFICA                           & E         & 1       & R    \\ \hline
     CATEGORIA                            & E         & 1       & R    \\ \hline
+    RECORD                               & E         & 1       & R    \\ \hline
+    CONSTITUISCE                         & A         & 1       & R    \\ \hline
     DIVISIONE\textunderscore CATEGORIA   & A         & 1       & R    \\ \hline
-    \textit{TOTALE}                      &           & 3       &      \\ \hline
+    \textit{TOTALE}                      &           & 5       &      \\ \hline
     \end{tabular}
 \end{table}
 
@@ -250,18 +260,14 @@ a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
     LOTTATORE                        & E         & 1       & W    \\ \hline
     RECORD                           & E         & 1       & R    \\ \hline
     RECORD                           & E         & 1       & W    \\ \hline
-    CATEGORIA                        & E         & 1       & R    \\ \hline
-    CATEGORIA                        & E         & 1       & W    \\ \hline
-    DISCIPLINA                       & E         & 1       & R    \\ \hline
-    DISCIPLINA                       & E         & 1       & W    \\ \hline
-    TEAM                             & E         & 1       & R    \\ \hline
-    TEAM                             & E         & 1       & W    \\ \hline
+    CLASSIFICA                       & E         & 2       & W    \\ \hline
     FA\textunderscore PARTE          & A         & 1       & R    \\ \hline
+    CONSTITUISCE                     & A         & 2       & R    \\ \hline
     PRATICA                          & A         & 1       & R    \\ \hline
     GESTISCE                         & A         & 1       & R    \\ \hline
     APPARTIENE                       & A         & 1       & R    \\ \hline
     DETIENE                          & A         & 1       & R    \\ \hline
-    \textit{TOTALE}                  &           & 21      &      \\ \hline
+    \textit{TOTALE}                  &           & 18      &      \\ \hline
     \end{tabular}
 \end{table}
 
