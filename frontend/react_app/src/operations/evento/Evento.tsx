@@ -3,14 +3,15 @@ import background from '../../img/lottatoreBackg.jpg';
 import { InputText } from 'primereact/inputtext';
 import { Calendar, CalendarChangeEvent } from 'primereact/calendar';
 import { InputNumber } from 'primereact/inputnumber';
-import { GetElements, client } from '../common/Getter';
+import { GetElements, client } from '../../common/Getter';
 import { Button } from 'primereact/button';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { Toast } from 'primereact/toast';
-import GoBack from '../common/GoBack';
+import GoBack from '../../common/GoBack';
 import { countries } from 'unique-names-generator';
 import './Evento.css';
 import AddScontri from './Scontri';
+import { useLocation } from 'react-router-dom';
 
 
 var selectedScontroI: string = "";
@@ -40,7 +41,9 @@ const ScontroV = (ScontroRicevuto: string) => {
     }
 }
 
-export default function Lottatore() {
+export default function Evento() {
+
+    const fromPath = useLocation().state.fromPath;
 
     function AddEvento() {
         const toast = useRef<Toast>(null);
@@ -275,7 +278,7 @@ export default function Lottatore() {
                 </h2> 
                 <AddEvento />
                 <AddScontri />
-                <GoBack />
+                <>{GoBack(fromPath)} </>
             </div>
         </div>
     );

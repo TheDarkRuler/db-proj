@@ -4,9 +4,9 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import axios from 'axios';
 import { GetElements } from './Getter';
-import "../team/Team.css"
-import "../sponsor/Sponsor.css"
-import "../lottatore/Lottatore.css"
+import "../operations/team/Team.css"
+import "../operations/sponsor/Sponsor.css"
+import "../operations/lottatore/Lottatore.css"
 
 export function Delete(locationGet: string, locationDelete: string, dropDownName: string) {
 

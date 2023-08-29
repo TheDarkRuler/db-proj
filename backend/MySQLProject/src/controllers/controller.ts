@@ -14,6 +14,52 @@ import { record } from '../entity/record';
 import { scontro } from '../entity/scontro';
 import { storicoScontri } from '../entity/storicoScontri';
 import { storicoEventi } from '../entity/storicoEventi';
+import { utente } from '../entity/utente';
+
+const getUtenti = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(utente).find();
+    let utenti = [];
+    (await result).forEach(x => { utenti.push(JSON.stringify(x)) });
+    return res.json(utenti);
+};
+
+const putUtente = async (req: Request, res: Response, next: NextFunction) => {
+    let temp = new utente;
+    temp.username = req.params.username.replace(":","").trim();
+    temp.passw = req.params.password.replace(":","").trim();
+    temp.tipo = "Utente";
+    AppDataSource.manager.getRepository(utente).save(temp);
+};
+
+const getPubblicitari = async (req: Request, res: Response, next: NextFunction) => {
+
+    let result = AppDataSource.manager.getRepository(utente).find({
+        where: {
+            tipo: "Pubblicitario",
+        }
+    });
+    let pubblicitari = [];
+    (await result).forEach(x => { pubblicitari.push(x.username) });
+    pubblicitari.forEach(x => {
+        res.append(x)
+    });
+    return res.json(pubblicitari);
+};
+
+const putPubblicitari = async (req: Request, res: Response, next: NextFunction) => {
+
+    let temp = new utente;
+    temp.username = req.params.username.replace(":","").trim();
+    temp.passw = req.params.password.replace(":","").trim();
+    temp.tipo = "Pubblicitario";
+    AppDataSource.manager.getRepository(utente).save(temp);
+};
+
+const removePubblicitari = async (req: Request, res: Response, next: NextFunction) => {
+
+    let temp = req.params.username.replace(":","").trim();
+    AppDataSource.manager.getRepository(utente).delete(temp);
+};
 
 const getLottatori = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -59,11 +105,11 @@ const insertClassifica = (temp: lottatore) => {
 const putLottatore = async (req: Request, res: Response, next: NextFunction) => {
 
     let temp = new lottatore;
-    temp.nome = req.params.nome.replace(":","");
-    temp.cognome = req.params.cognome.replace(":","");
+    temp.nome = req.params.nome.replace(":","").trim();
+    temp.cognome = req.params.cognome.replace(":","").trim();
     temp.codiceFiscale = req.params.cf.replace(":","").trim();
     temp.arteMarziale = req.params.disciplina.replace(":","");
-    temp.peso = parseInt(req.params.peso.replace(":",""));
+    temp.peso = parseInt(req.params.peso.replace(":","").trim());
     temp.categoria = insertClassifica(temp);
     temp.team = req.params.team.replace(":","");
     temp.dataNascita = new Date(req.params.nascita.replace(":",""));
@@ -532,6 +578,7 @@ const getPesiMassimi = async (req: Request, res: Response, next: NextFunction) =
 };
 
 export default { 
+    getUtenti, putUtente, getPubblicitari, putPubblicitari, removePubblicitari,
     getLottatori, getFiltedLottatori, putLottatore, deleteLottatore, editLottatore,
     getCategorie, getDiscipline, getRecord,
     getTeams, putTeam, deleteTeam,

@@ -1,15 +1,18 @@
 import { useRef, useState } from 'react';
 import background from '../../img/lottatoreBackg.jpg';
-import { Delete } from '../common/Delete';
-import GoBack from '../common/GoBack';
-import { client } from '../common/Getter';
+import { Delete } from '../../common/Delete';
+import GoBack from '../../common/GoBack';
+import { client } from '../../common/Getter';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { countries } from 'unique-names-generator';
+import { useLocation } from 'react-router-dom';
 
 export default function Team() {
+
+    const fromPath = useLocation().state.fromPath;
 
     function AddTeam() {
         const buttonEl = useRef(null);
@@ -96,7 +99,7 @@ export default function Team() {
                 </h2> 
                 <>{Delete('team/', 'team/rimuovi/', 'teamDropDown')}</>
                 <AddTeam />
-                <GoBack />
+                <>{GoBack(fromPath)} /</>
             </div>
         </div>
     );

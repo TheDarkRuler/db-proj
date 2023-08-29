@@ -207,7 +207,7 @@ export class populate {
         Scontro.categoria = uniqueNamesGenerator(config = {dictionaries: [categorie]});
         Scontro.disciplina = uniqueNamesGenerator(config = {dictionaries: [artiMarziali]});
 
-        this.populateStoricoScontri(Scontro.idEvento, Scontro.idScontro);
+        this.populateStoricoScontri(Scontro.idEvento, Scontro.idScontro, Scontro.categoria);
         await this.AppDataSource.manager.save(Scontro);
 
     }
@@ -280,7 +280,7 @@ export class populate {
 
     }
     
-    async populateStoricoScontri(idEvento: number, idScontro: number) {
+    async populateStoricoScontri(idEvento: number, idScontro: number, categoria: string) {
         let StoricoScontri = new storicoScontri();
         
         var config: Config = {
@@ -291,8 +291,19 @@ export class populate {
         StoricoScontri.idEvento = idEvento;
         StoricoScontri.idScontro = idScontro;
 
-        StoricoScontri.primoPartecipante = uniqueNamesGenerator(config = {dictionaries: [names], style: 'capital'})
-        StoricoScontri.secondoPartecipante = uniqueNamesGenerator(config = {dictionaries: [names], style: 'capital'})
+        const lottatori = [];
+
+        const temp = this.AppDataSource.manager.getRepository(lottatore).find({
+            where: {
+                categoria: categoria
+            }
+        });
+
+        (await temp).forEach(x => lottatori.push(x.codiceFiscale));
+
+        StoricoScontri.primoPartecipante = uniqueNamesGenerator(config = {dictionaries: [lottatori]});
+        lottatori.slice(lottatori.indexOf(StoricoScontri.primoPartecipante, 1));
+        StoricoScontri.secondoPartecipante = uniqueNamesGenerator(config = {dictionaries: [lottatori]});
 
         if (Math.random() > 0.70) {
             StoricoScontri.pareggio = true;

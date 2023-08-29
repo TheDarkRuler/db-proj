@@ -2,6 +2,11 @@ import express = require('express');
 import controller from '../controllers/controller';
 const router = express.Router();
 
+router.get('/utenti', controller.getUtenti);
+router.get('/utenti/insert/:username/:password', controller.putUtente);
+router.get('/pubblicitari', controller.getPubblicitari);
+router.get('/pubblicitari/rimuovi/:username', controller.removePubblicitari);
+router.get('/pubblicitari/aggiungi/:username/:password', controller.putPubblicitari);
 router.get('/lottatore', controller.getLottatori);
 router.get('/lottatore/complete', controller.getFiltedLottatori);
 router.get('/lottatore/aggiungi/:nome/:cognome/:cf/:nascita/:peso/:team/:disciplina', controller.putLottatore);

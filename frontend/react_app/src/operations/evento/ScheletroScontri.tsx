@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { GetElements } from "../common/Getter";
+import { GetElements } from "../../common/Getter";
 import { Toast } from "primereact/toast";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 import { ScontroI, ScontroII, ScontroIII, ScontroIV, ScontroV, selectedScontroIII, selectedScontroIV } from "./Evento";

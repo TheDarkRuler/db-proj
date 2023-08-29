@@ -3,7 +3,7 @@ import background from '../img/statisticsBack.jpg';
 import { useNavigate } from 'react-router-dom';
 import { TabView, TabPanel } from 'primereact/tabview';
 import "./Statistics.css"
-import { GetElements } from '../operations/common/Getter';
+import { GetElements } from '../common/Getter';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { TreeItem, TreeView } from '@mui/lab';

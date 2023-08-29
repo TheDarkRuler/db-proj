@@ -1,0 +1,57 @@
+.optionsTextPubblicitario1 {
+    position: absolute;
+    margin-left: 15%;
+    margin-top: 5%;
+    font-size: 25px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.optionsTextPubblicitario2 {
+    position: absolute;
+    margin-left: 67%;
+    margin-top: 5%;
+    font-size: 25px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.pubblicitariDropDown {
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    position: absolute;
+    margin-top: 12%;
+    margin-left: 18%;
+    font-family: "Lucida Bright", Times, serif;
+    width: 250px;
+}
+
+.addPubbl {
+    width: 250px;
+    position: absolute;
+    margin-top: 12%;
+    margin-left: 15%;
+}
+
+.MyButtonAdd {
+    background-color: #696969;
+    position: absolute;
+    border: 2px solid black;
+    color: #D3D3D3;
+    padding: 15px 32px;
+    border-radius: 0%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 17px;
+    cursor: pointer;
+    width: 150px;
+    margin-left: -30%;
+    font-family: "Times New Roman", Times, serif;
+    margin-top: 73%;
+    opacity: 0.9;
+}
+
+.MyButtonAdd:hover {
+    opacity: 1;
+    transition: 0.3s;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.50), 0 17px 50px 0 rgba(0,0,0,0.50);;
+}

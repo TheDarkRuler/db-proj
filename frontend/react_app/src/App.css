@@ -4,52 +4,114 @@
 
 @media (prefers-reduced-motion: no-preference) {
 
-.MyButton {
-  display: inline-block;
-  opacity: 0.6;
-  border-radius: 30px;
-  background-color: gold;
-  border: 5px solid #000000;
-  color: #000000;
-  text-align: center;
-  font-size: 16px;
-  padding: 20px;
-  width: 260px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top: 20%;
-  font-family: "Times New Roman", Times, serif;
+  .MyButtonLogIn {
+    display: inline-block;
+    opacity: 0.6;
+    border-radius: 30px;
+    background-color: gold;
+    border: 5px solid #000000;
+    color: #000000;
+    text-align: center;
+    font-size: 16px;
+    padding: 20px;
+    width: 260px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin-top: 40%;
+    font-family: "Times New Roman", Times, serif;
 }
 
-.MyButton:hover {
-  opacity: 1;
+.MyButtonLogIn:hover {
+    opacity: 1;
 }
 
-.MyButton span {
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  transition: 0.5s;
+.MyButtonLogIn span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
 }
 
-.MyButton span:after {
-  content: '\27A5';
+.MyButtonLogIn span:after {
+    content: '\27A5';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.MyButtonLogIn:hover span {
+    padding-right: 25px;
+}
+
+.MyButtonLogIn:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .MyButtonSignIn {
+    display: inline-block;
+    opacity: 0.6;
+    border-radius: 30px;
+    background-color: gold;
+    border: 5px solid #000000;
+    color: #000000;
+    text-align: center;
+    font-size: 16px;
+    padding: 20px;
+    width: 260px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin-top: 20%;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.MyButtonSignIn:hover {
+    opacity: 1;
+}
+
+.MyButtonSignIn span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.MyButtonSignIn span:after {
+    content: '\27A5';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.MyButtonSignIn:hover span {
+    padding-right: 25px;
+}
+
+.MyButtonSignIn:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+}
+
+.logIn {
+  width: 250px;
   position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -20px;
-  transition: 0.5s;
+  margin-top: 15%;
+  margin-left: 25%;
 }
 
-.MyButton:hover span {
-  padding-right: 25px;
-}
-
-.MyButton:hover span:after {
-  opacity: 1;
-  right: 0;
-}
-
+.signIn {
+  width: 250px;
+  position: absolute;
+  margin-top: 15%;
+  margin-left: 55%;
 }

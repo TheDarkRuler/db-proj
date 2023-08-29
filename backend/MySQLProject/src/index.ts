@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { amministratore } from './entity/amministratore';
+import { utente } from './entity/utente';
 import { categoria } from './entity/categoria';
 import { disciplina } from './entity/disciplina';
 import { populate } from './populate';
@@ -21,17 +21,29 @@ const AppDataSource = new DataSource({
 });
 
 AppDataSource.initialize().then(async connection => {
-    let Amministratore = new amministratore();
+    let Utente = new utente();
     let Categoria = new categoria();
     let Disciplina = new disciplina();
     let Populate = new populate(connection);
     let Common = new common();
 
-    Amministratore.username = "TheDarkRuler";
-    await connection.manager.save(Amministratore);
+    Utente.username = "TheDarkRuler";
+    Utente.passw = "a";
+    Utente.tipo = "Amministratore"
+    await connection.manager.save(Utente);
+
+    Utente.username = "utente";
+    Utente.passw = "u";
+    Utente.tipo = "Utente";
+    await connection.manager.save(Utente);
+
+    Utente.username = "pubblicitario";
+    Utente.passw = "p";
+    Utente.tipo = "Pubblicitario"
+    await connection.manager.save(Utente);
 
     Categoria.nome = "PesoPiuma"
-    Categoria.pesoMinimo = 50;
+    Categoria.pesoMinimo = null;
     Categoria.pesiMassimi = 65
     await connection.manager.save(Categoria);
 
@@ -47,7 +59,7 @@ AppDataSource.initialize().then(async connection => {
 
     Categoria.nome = "PesiMassimi"
     Categoria.pesoMinimo = 85
-    Categoria.pesiMassimi = 150;
+    Categoria.pesiMassimi = null;
     await connection.manager.save(Categoria);
 
     Disciplina.nome = "BJJ"

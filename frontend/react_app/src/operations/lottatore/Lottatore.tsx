@@ -1,17 +1,21 @@
 import React, { useRef, useState } from 'react';
 import './Lottatore.css';
 import background from '../../img/lottatoreBackg.jpg';
-import { Delete } from '../common/Delete';
+import { Delete } from '../../common/Delete';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
 import { InputNumber } from 'primereact/inputnumber';
-import { GetElements, client } from '../common/Getter';
+import { GetElements, client } from '../../common/Getter';
 import { Button } from 'primereact/button';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { Toast } from 'primereact/toast';
-import GoBack from '../common/GoBack';
+import GoBack from '../../common/GoBack';
+import { useLocation } from 'react-router-dom';
 
 export default function Lottatore() {
+
+    const fromPath = useLocation().state.fromPath;
+    console.log(fromPath)
 
     function AddMember() {
         const buttonEl = useRef(null);
@@ -128,7 +132,7 @@ export default function Lottatore() {
                 </h2> 
                 <>{Delete('lottatore/', 'lottatore/rimuovi/', 'lottatori')}</>
                 <AddMember />
-                <GoBack />
+                <>{GoBack(fromPath)} </>
             </div>
         </div>
     );

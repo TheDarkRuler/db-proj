@@ -7,7 +7,7 @@ import { Calendar } from "primereact/calendar";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
 import background from '../../img/lottatoreBackg.jpg';
-import "./EditLottatore.css"
+import "./EditEvento.css"
 import GoBack from "../../common/GoBack";
 import { useLocation } from "react-router-dom";
 
@@ -106,11 +106,11 @@ export default function EditLottatore() {
 
         return (
             <>
-                <div className='editMember'>
+                <div className='editEvento'>
                     <div className="p-inputgroup">
                         <select className="DropDownFirst" onChange={ e => insertMemberData(e.target.value) }>
                             <option selected={true} disabled hidden value="default">
-                                --Membro da modificare--
+                                --Evento da modificare--
                             </option>
                             {renderListLottatori}
                         </select>
@@ -176,7 +176,7 @@ export default function EditLottatore() {
     }
 
     return (
-        <div className="EditLottatore">
+        <div className="EditEvento">
             <div className='backgroundLottatore' style={{backgroundImage: `url(${background})`, 
                 backgroundSize: 'cover',
                 backgroundRepeat: "no-repeat",
@@ -185,10 +185,10 @@ export default function EditLottatore() {
                 width: '100vw',
                 }}>
                 <h1 className='textEdit'>
-                    Seleziona un membro da modificare ↴
+                    Seleziona un Evento da modificare ↴
                 </h1>
                 <h1 className='textEditRecord'>
-                    Record ↴
+                    Scontri ↴
                 </h1>
                 <Edit/>
                 <>{GoBack(fromPath)} </>
