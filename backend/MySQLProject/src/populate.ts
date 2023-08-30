@@ -12,6 +12,8 @@ import { DataSource } from 'typeorm';
 import { classifica_welterweight } from './entity/classifica_welterweight';
 import { classifica_medio } from './entity/classifica_medio';
 import { classifica_massimi } from './entity/classifica_massimi';
+import { news } from './entity/news';
+import { utente } from './entity/utente';
 
 export class populate {
 
@@ -322,5 +324,33 @@ export class populate {
 
         await this.AppDataSource.manager.save(StoricoScontri);
 
+    }
+
+    async populateNews(n: number) {
+        
+        let News = new news;
+
+        const pubblicitari = [];
+
+        var config: Config = {
+            dictionaries: [pubblicitari],
+        }
+
+        const temp = this.AppDataSource.manager.getRepository(utente).find({
+            where: {
+                tipo: "Pubblicitario"
+            }
+        });
+
+        (await temp).forEach(x => pubblicitari.push(x.username));
+
+        for (let i = 0; i < n; i++) {
+            News.idNews = i;
+            News.argomento = uniqueNamesGenerator(config = {dictionaries: [adjectives, colors]});
+            News.scrittore = uniqueNamesGenerator(config = {dictionaries: [pubblicitari]});
+            News.descrizione = uniqueNamesGenerator(config = {dictionaries: [adjectives, adjectives, adjectives, animals]});
+
+            await this.AppDataSource.manager.save(News);
+        }
     }
 }

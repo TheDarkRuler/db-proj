@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 
 export default function EditLottatore() {
 
-    const fromPath = useLocation().state.fromPath;
+    const username = useLocation().state.username;
 
     function Edit() {
         const buttonEl = useRef(null);
@@ -191,7 +191,7 @@ export default function EditLottatore() {
                     Record ↴
                 </h1>
                 <Edit/>
-                <>{GoBack(fromPath)} </>
+                <>{GoBack(username)}</>
             </div>
         </div>
     );

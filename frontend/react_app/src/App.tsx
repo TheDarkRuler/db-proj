@@ -19,8 +19,9 @@ const LogIn = () => {
 
   let navigate = useNavigate();
   const routeChange = (tipo: string) => {
-    let path = `Menu/${tipo}`;
-    navigate(path, { replace: true });
+    let path: string;
+    tipo === "Utente"? path = "Statistics": path = `Menu/${tipo}`;
+    navigate(path, { state: {utente: (path === "Statistics"), username: selectedUsername}, replace: true });
   };
 
   const confirm = () => {
@@ -47,7 +48,7 @@ const LogIn = () => {
         <InputText onChange={e => setSelectedUsername(e.target.value)} placeholder="Username" />
       </div>
       <div className="p-inputgroup flex-1">
-        <Password onChange={e => setSelectedPassword(e.target.value)} placeholder="Password" toggleMask />
+        <Password onChange={e => setSelectedPassword(e.target.value)} placeholder="Password" toggleMask feedback={false} />
       </div>
       <Toast ref={toast} />
       <div onClick={confirm} className='MyButtonLogIn'>
@@ -72,8 +73,8 @@ const SignIn = () => {
 
   let navigate = useNavigate();
   const routeChange = () => {
-    let path = `Menu/Utente`;
-    navigate(path, { replace: true });
+    let path = `Statistics`;
+    navigate(path, { state: {utente: true}, replace: true });
   };
 
   const confirm = () => {
@@ -101,7 +102,8 @@ const SignIn = () => {
         <Password onChange={e => setSelectedPassword(e.target.value)} placeholder="Password" toggleMask />
       </div>
       <div className="p-inputgroup flex-1">
-        <Password onChange={e => setSelectedConfirmPassword(e.target.value)} placeholder="Conferma Password" toggleMask />
+        <Password onChange={e => setSelectedConfirmPassword(e.target.value)} placeholder="Conferma Password" 
+          feedback={false} toggleMask />
       </div>
       <Toast ref={toast} />
       <div onClick={selectedPassword === selectedConfirmPassword && selectedPassword !== null && selectedUsername !== null? 

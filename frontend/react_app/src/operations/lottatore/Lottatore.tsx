@@ -14,8 +14,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function Lottatore() {
 
-    const fromPath = useLocation().state.fromPath;
-    console.log(fromPath)
+    const username = useLocation().state.username;
 
     function AddMember() {
         const buttonEl = useRef(null);
@@ -132,7 +131,7 @@ export default function Lottatore() {
                 </h2> 
                 <>{Delete('lottatore/', 'lottatore/rimuovi/', 'lottatori')}</>
                 <AddMember />
-                <>{GoBack(fromPath)} </>
+                <>{GoBack(username)}</>
             </div>
         </div>
     );

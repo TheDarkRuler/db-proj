@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function Team() {
 
-    const fromPath = useLocation().state.fromPath;
+    const username = useLocation().state.username;
 
     function AddTeam() {
         const buttonEl = useRef(null);
@@ -99,7 +99,7 @@ export default function Team() {
                 </h2> 
                 <>{Delete('team/', 'team/rimuovi/', 'teamDropDown')}</>
                 <AddTeam />
-                <>{GoBack(fromPath)} /</>
+                <>{GoBack(username)}</>
             </div>
         </div>
     );

@@ -15,11 +15,23 @@ import { scontro } from '../entity/scontro';
 import { storicoScontri } from '../entity/storicoScontri';
 import { storicoEventi } from '../entity/storicoEventi';
 import { utente } from '../entity/utente';
+import { news } from '../entity/news';
 
 const getUtenti = async (req: Request, res: Response, next: NextFunction) => {
     let result = AppDataSource.manager.getRepository(utente).find();
     let utenti = [];
     (await result).forEach(x => { utenti.push(JSON.stringify(x)) });
+    return res.json(utenti);
+};
+
+const getUtenteTipo = async (req: Request, res: Response, next: NextFunction) => {
+    let temp = req.params.username.replace(":","");
+    let result = AppDataSource.manager.getRepository(utente).findOne({
+        where: {
+            username: temp
+        }
+    });
+    let utenti = (await result).tipo;
     return res.json(utenti);
 };
 
@@ -29,6 +41,28 @@ const putUtente = async (req: Request, res: Response, next: NextFunction) => {
     temp.passw = req.params.password.replace(":","").trim();
     temp.tipo = "Utente";
     AppDataSource.manager.getRepository(utente).save(temp);
+};
+
+const getNews = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(news).find();
+    let News = [];
+    (await result).forEach(x => { News.push(JSON.stringify(x)) });
+    return res.json(News);
+};
+
+const removeNews = async (req: Request, res: Response, next: NextFunction) => {
+
+    let temp = req.params.id.replace(":","").trim();
+    AppDataSource.manager.getRepository(news).delete(temp);
+};
+
+const putNews = async (req: Request, res: Response, next: NextFunction) => {
+    let temp = new news;
+    temp.idNews = (await AppDataSource.manager.getRepository(news).find()).length;
+    temp.argomento = req.params.argomento.replace(":","");
+    temp.descrizione = req.params.descrizione.replace(":","");
+    temp.scrittore = req.params.username.replace(":","");
+    AppDataSource.manager.getRepository(news).save(temp);
 };
 
 const getPubblicitari = async (req: Request, res: Response, next: NextFunction) => {
@@ -578,7 +612,7 @@ const getPesiMassimi = async (req: Request, res: Response, next: NextFunction) =
 };
 
 export default { 
-    getUtenti, putUtente, getPubblicitari, putPubblicitari, removePubblicitari,
+    getUtenti, putUtente, getUtenteTipo, getPubblicitari, putPubblicitari, removePubblicitari, getNews, removeNews, putNews,
     getLottatori, getFiltedLottatori, putLottatore, deleteLottatore, editLottatore,
     getCategorie, getDiscipline, getRecord,
     getTeams, putTeam, deleteTeam,

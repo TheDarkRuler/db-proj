@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import GoBack from "../../common/GoBack";
 import background from '../../img/lottatoreBackg.jpg';
 import { Delete } from "../../common/Delete";
@@ -9,10 +8,12 @@ import { GetElements, client } from "../../common/Getter";
 import { Toast } from "primereact/toast";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 import { Button } from "primereact/button";
+import { Password } from "primereact/password";
+import { useLocation } from "react-router-dom";
 
 export default function Pubblicitari() {
 
-    const fromPath = useLocation().state.fromPath;
+    const username = useLocation().state.username;
 
     const AddPubblicitario = () => {
         const toast = useRef<Toast>(null);
@@ -63,7 +64,7 @@ export default function Pubblicitari() {
                     <InputText onChange={e => setSelectedUsername(e.target.value)} placeholder="Username" />
                 </div>
                 <div className="p-inputgroup flex-1">
-                    <InputText onChange={e => setSelectedPassword(e.target.value)} placeholder="Password" />
+                    <Password onChange={e => setSelectedPassword(e.target.value)} placeholder="Password" toggleMask />
                 </div>
                 <Toast ref={toast} />
                 <ConfirmPopup />
@@ -93,7 +94,7 @@ export default function Pubblicitari() {
                 </h2>
                 <>{Delete('pubblicitari/', 'pubblicitari/rimuovi/', 'pubblicitariDropDown')}</>
                 <AddPubblicitario />
-                <>{GoBack(fromPath)} </>
+                <>{GoBack(username)}</>
             </div>
         </div>
     );

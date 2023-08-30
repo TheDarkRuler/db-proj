@@ -77,7 +77,10 @@ AppDataSource.initialize().then(async connection => {
 
             Populate.populateSponsorizzazioni(Common.card_sponsor()).then( () => {
 
-                Populate.populateEvento(Common.card_evento());
+                Populate.populateEvento(Common.card_evento()).then(() => {
+                    
+                    Populate.populateNews(Common.card_news());
+                });
             });
         });    
     });

@@ -5,14 +5,14 @@ import background from '../img/operationsBack.jpg';
 
 export default function Operations() {
 
-    const fromPath = useLocation().state.fromPath;
+    const username = useLocation().state.username;
 
     function LottatoreButton() {
 
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Operations/Lottatore`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
+            navigate(path, { state: {username: username}, replace: true});
         }
 
         return (
@@ -29,7 +29,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Operations/Team`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
+            navigate(path, { state: {username: username}, replace: true});
         }
 
         return (
@@ -46,7 +46,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Operations/Sponsor`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
+            navigate(path, { state: {username: username}, replace: true});
         }
 
         return (
@@ -63,7 +63,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Operations/Evento`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
+            navigate(path, { state: {username: username}, replace: true});
         }
 
         return (
@@ -80,7 +80,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Operations/LottatoreEdit`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
+            navigate(path, { state: {username: username}, replace: true});
         }
 
         return (
@@ -92,29 +92,12 @@ export default function Operations() {
         );
     }
 
-    function ModificaEvento() {
-
-        let navigate = useNavigate();
-        const routeChange = () => {
-            let path = `/Operations/EventoEdit`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
-        }
-
-        return (
-            <div className='buttonEditEven' onClick={routeChange}>
-                <span>
-                    Modifica Eventi
-                </span>
-            </div>
-        );
-    }
-
     function NewsControl() {
 
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Operations/NewsControl`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
+            navigate(path, { state: {username: username}, replace: true});
         }
 
         return (
@@ -132,7 +115,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Operations/Pubblicitari`;
-            navigate(path, {state:{fromPath: fromPath}, replace: true});
+            navigate(path, { state: {username: username}, replace: true});
         }
 
         return (
@@ -148,8 +131,8 @@ export default function Operations() {
 
         let navigate = useNavigate();
         const routeChange = () => {
-            let path = `${fromPath}`;
-            navigate(path, { replace: true });
+            let path = "../Menu/Amministratore";
+            navigate(path, { state: { username: username, utente: false}, replace: true });
         }
 
         return (
@@ -180,7 +163,6 @@ export default function Operations() {
                 <SponsorButton />
                 <Evento />
                 <ModificaLottatore />
-                <ModificaEvento />
                 <NewsControl />
                 <Pubblicitari />
                 <BackToMenu />

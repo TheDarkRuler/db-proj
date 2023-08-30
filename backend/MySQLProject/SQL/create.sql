@@ -144,6 +144,15 @@ CREATE TABLE SPONSORIZZAZIONI (
     PRIMARY KEY (idSponsor)
 );
 
+DROP TABLE IF EXISTS NEWS;
+CREATE TABLE NEWS (
+	idNews integer NOT NULL,
+    argomento varchar(128) NOT NULL,
+    descrizione varchar(4096) NOT NULL,
+    scrittore varchar(40) NOT NULL,
+    PRIMARY KEY (idNews)
+);
+
 DROP TABLE IF EXISTS STORICO_EVENTI;
 CREATE TABLE STORICO_EVENTI (
 	idEvento integer NOT NULL,

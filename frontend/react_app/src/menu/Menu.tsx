@@ -8,25 +8,23 @@ import { Toast } from 'primereact/toast';
 function OperationButton() {
 
     const toast = useRef<Toast>(null);
-    const pathName = useLocation().pathname;
+    const temp = useLocation();
+    const pathName = temp.pathname;
+    const username = temp.state.username;
+    const location = pathName === "/Menu/Amministratore"? "Operations": "News";
 
     let navigate = useNavigate();
     const routeChange = () => {
-        let path = `../../Operations`;
-        navigate(path, {state:{fromPath: pathName}, replace: true});
-    }
-
-    const sendError = () => {
-        toast.current?.show({ severity: 'error', summary: 'Error', 
-            detail: 'Non hai i permessi necessari per effettuare modifiche', life: 3000 });
+        let path = `../../${location}`;
+        navigate(path, {state: {username: username}, replace: true});
     }
 
     return (
         <>
             <Toast ref={toast} />
-            <div className='MyMenuButton' onClick={useLocation().pathname === "/Menu/Amministratore" ? routeChange: sendError}>
+            <div className='MyMenuButton' onClick={routeChange}>
                 <span>
-                    Operazioni Amministratore
+                    {location}
                 </span>
             </div>
         </>
@@ -35,18 +33,35 @@ function OperationButton() {
 
 function StatisticsButton() {
 
-    const pathName = useLocation().pathname;
+    const username = useLocation().state.username
 
     let navigate = useNavigate();
     const routeChange = () => {
         let path = `../../Statistics`;
-        navigate(path, {state:{fromPath: pathName}, replace: true});
+        navigate(path, {state: {utente: false, username: username}, replace: true});
     }
 
     return (
         <div className='MyMenuButton' onClick={routeChange}>
             <span>
                 Visualizza Statistiche
+            </span>
+        </div>
+    );
+}
+
+function LogOut() {
+
+    let navigate = useNavigate();
+    const routeChange = () => {
+        let path = `../..`;
+        navigate(path, { replace: true});
+    }
+
+    return (
+        <div className='LogOutButton' onClick={routeChange}>
+            <span>
+                Log out
             </span>
         </div>
     );
@@ -65,6 +80,7 @@ function Menu() {
                 height: '100vh',
                 width: '100vw',
             }}>
+                <LogOut />
                 <OperationButton />
                 <StatisticsButton />
             </div>

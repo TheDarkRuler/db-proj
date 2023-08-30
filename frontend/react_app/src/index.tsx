@@ -16,10 +16,11 @@ import Team from './operations/team/Team';
 import Sponsor from './operations/sponsor/Sponsor';
 import Evento from './operations/evento/Evento';
 import EditLottatore from './operations/editLottatore/EditLottatore';
-import EditEvento from './operations/editEvento/EditEvento';
 import ManageNews from './operations/manageNews/ManageNews';
 import Menu from './menu/Menu';
 import Pubblicitari from './operations/pubblicitari/Pubblicitari';
+import News from './news/News';
+import Classifiche from './statistics/classifiche/Classifiche';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -33,18 +34,17 @@ root.render(
         <Route path='Menu/Amministratore' element={<Menu />} />
         <Route path='Menu/Pubblicitario' element={<Menu />} />
         <Route path='Statistics' element={<Statistics />} />
-        <Route path='Statistics/visClassifiche' element={<Statistics />} />
+        <Route path='Statistics/visClassifiche' element={<Classifiche />} />
         <Route path='Statistics/visEventi' element={<Statistics />} />
         <Route path='Statistics/visLottatori' element={<Statistics />} />
         <Route path='Statistics/visNews' element={<Statistics />} />
-        <Route path='News' element={<Operations />} />
+        <Route path='News' element={<News />} />
         <Route path='Operations' element={<Operations />} />
         <Route path='Operations/Lottatore' element={<Lottatore />} />
         <Route path='Operations/Team' element={<Team />} />
         <Route path='Operations/Sponsor' element={<Sponsor />} />
         <Route path='Operations/Evento' element={<Evento />} />
         <Route path='Operations/LottatoreEdit' element={<EditLottatore />} />
-        <Route path='Operations/EventoEdit' element={<EditEvento />} />
         <Route path='Operations/NewsControl' element={<ManageNews />} />
         <Route path='Operations/Pubblicitari' element={<Pubblicitari />} />
       </Routes>

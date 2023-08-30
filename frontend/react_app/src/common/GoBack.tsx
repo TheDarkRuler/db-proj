@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import "./Common.css"
 
-export default function GoBack(fromPath: string) {
+export default function GoBack(username: string) {
 
     let navigate = useNavigate(); 
     const routeChange = () =>{ 
         let path = `/Operations`;
-        navigate(path, {state:{fromPath: fromPath}, replace: true});
+        navigate(path, {state: {username: username}, replace: true});
     }
     
     return (

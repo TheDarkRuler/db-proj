@@ -26,6 +26,9 @@ INSERT INTO CATEGORIA (nome, pesoMinimo, pesoMassimo)
     
 INSERT INTO SCONTRO (idScontro, disciplina, categoria, pagamentoExtra)
 	VALUES ($1, $2, $3, $4);
+
+INSERT INTO NEWS (idNews, argomento, descrizione)
+	VALUES ($1, $2, $3);
     
 INSERT INTO STORICO_SCONTRI (idScontro, primoPartecipante, secondoPartecipante, vincitore, perdente, pareggio)
 	VALUES ($1, $2, $3, $4, $5, $6);

@@ -43,7 +43,7 @@ const ScontroV = (ScontroRicevuto: string) => {
 
 export default function Evento() {
 
-    const fromPath = useLocation().state.fromPath;
+    const username = useLocation().state.username;
 
     function AddEvento() {
         const toast = useRef<Toast>(null);
@@ -278,7 +278,7 @@ export default function Evento() {
                 </h2> 
                 <AddEvento />
                 <AddScontri />
-                <>{GoBack(fromPath)} </>
+                <>{GoBack(username)}</>
             </div>
         </div>
     );
