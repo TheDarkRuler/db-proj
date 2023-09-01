@@ -1,0 +1,35 @@
+.VisLottatori {
+    text-align: center;
+}
+
+.viewMember {
+    width: 250px;
+    position: absolute;
+    margin-top: 10%;
+    margin-left: 27%;
+}
+
+.viewLottRecord {
+    width: 250px;
+    position: absolute;
+    margin-top: 10%;
+    margin-left: 59%;
+}
+
+.textViewLott {
+    position: absolute;
+    color: white;
+    margin-left: 17%;
+    margin-top: 6%;
+    font-size: 25px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.textViewLottRecord {
+    position: absolute;
+    color: white;
+    margin-left: 63%;
+    margin-top: 6%;
+    font-size: 25px;
+    font-family: "Times New Roman", Times, serif;
+}

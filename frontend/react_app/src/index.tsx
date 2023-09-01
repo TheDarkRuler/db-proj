@@ -21,6 +21,9 @@ import Menu from './menu/Menu';
 import Pubblicitari from './operations/pubblicitari/Pubblicitari';
 import News from './news/News';
 import Classifiche from './statistics/classifiche/Classifiche';
+import VisLottatori from './statistics/lottatoreVis/VisLottatori';
+import NewsVis from './statistics/newsVis/NewsVis';
+import EventiVis from './statistics/eventiVis/EventiVis';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -35,9 +38,9 @@ root.render(
         <Route path='Menu/Pubblicitario' element={<Menu />} />
         <Route path='Statistics' element={<Statistics />} />
         <Route path='Statistics/visClassifiche' element={<Classifiche />} />
-        <Route path='Statistics/visEventi' element={<Statistics />} />
-        <Route path='Statistics/visLottatori' element={<Statistics />} />
-        <Route path='Statistics/visNews' element={<Statistics />} />
+        <Route path='Statistics/visEventi' element={<EventiVis />} />
+        <Route path='Statistics/visLottatori' element={<VisLottatori />} />
+        <Route path='Statistics/visNews' element={<NewsVis />} />
         <Route path='News' element={<News />} />
         <Route path='Operations' element={<Operations />} />
         <Route path='Operations/Lottatore' element={<Lottatore />} />

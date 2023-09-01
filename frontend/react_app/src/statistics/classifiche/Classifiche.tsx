@@ -7,29 +7,9 @@ import { GetElements } from '../../common/Getter';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { TreeItem, TreeView } from '@mui/lab';
+import GoBackStats from '../commonStat/GoBackStats';
 
 export default function Statistics() {
-// DA RENDERE UNIVERSALE 
-    const temp = useLocation();
-    const utente = temp.state.utente;
-    const username = temp.state.username;
-
-    const GoBack = () => {
-
-        let navigate = useNavigate();
-        const routeChange = () => {
-            let path = `/Statistics`;
-            navigate(path, {state: {utente: utente, username: username}, replace: true });
-        }
-
-        return (
-            <div className='buttonIndietro' onClick={routeChange}>
-                <span>
-                    Indietro
-                </span>
-            </div>
-        );
-    }
 
     const ShowClassifiche = () => {
 
@@ -152,7 +132,7 @@ export default function Statistics() {
                     Classifiche ↴
                 </p>
                 <ShowClassifiche />
-                <GoBack />
+                <>{GoBackStats(useLocation())}</>
             </div>
         </div>
     );

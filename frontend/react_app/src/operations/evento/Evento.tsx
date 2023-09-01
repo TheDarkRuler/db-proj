@@ -66,7 +66,6 @@ export default function Evento() {
         const [selectedTimeEnd, setSelectedTimeEnd] = useState(null);
 
         const accept = () => {
-            console.log(selectedTimeStart);
             if (selectedStadiumName === "" || selectedCountrie === null || selectedRentPrice === "" || selectedStaffPrice === "" || 
                     selectedTimeStart === null || selectedTimeEnd === null || date === null || 
                     selectedStandardPrice === "" || selectedPremiumPrice === "" || selectedPremiumNumber === "" || 
@@ -89,7 +88,6 @@ export default function Evento() {
                     premNum: selectedPremiumNumber,
                     premPrice: selectedPremiumPrice
                 };
-                console.log(temp);
                 if (selectedScontroIII === "" && selectedScontroIV === "" && selectedScontroV === "") {
                     client.get(`/evento/aggiungi/:${JSON.stringify(temp)}${selectedScontroI}${selectedScontroII}`);
                 } else if (selectedScontroIV === "" && selectedScontroV === "") {

@@ -132,8 +132,8 @@ CREATE TABLE EVENTO (
     costoBigliettiPremium integer,
     costoBigliettiStandard integer,
     sponsor JSON,
-    PRIMARY KEY (idEvento),
-    CONSTRAINT ORARIO CHECK (oraInizio <= oraFine)
+    PRIMARY KEY (idEvento)
+    /*CONSTRAINT ORARIO CHECK (oraInizio <= oraFine)  (Removed because of the case when event ends after midnight)*/
 );
 
 DROP TABLE IF EXISTS SPONSORIZZAZIONI;

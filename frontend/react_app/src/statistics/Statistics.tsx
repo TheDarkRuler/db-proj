@@ -19,7 +19,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Statistics/visClassifiche`;
-            navigate(path, { state: { username: username }, replace: true });
+            navigate(path, { state: { utente: isUtente, username: username }, replace: true });
         }
 
         return (
@@ -36,7 +36,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Statistics/visLottatori`;
-            navigate(path, { state: { username: username }, replace: true });
+            navigate(path, { state: { utente: isUtente, username: username }, replace: true });
         }
 
         return (
@@ -53,7 +53,7 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Statistics/visNews`;
-            navigate(path, { state: { username: username }, replace: true });
+            navigate(path, { state: { utente: isUtente, username: username }, replace: true });
         }
 
         return (
@@ -71,13 +71,13 @@ export default function Operations() {
         let navigate = useNavigate();
         const routeChange = () => {
             let path = `/Statistics/visEventi`;
-            navigate(path, { state: { username: username }, replace: true });
+            navigate(path, { state: { utente: isUtente, username: username }, replace: true });
         }
 
         return (
             <div className='buttonOpp' onClick={routeChange}>
                 <span>
-                    Visualizza scorsi eventi
+                    Visualizza eventi passati
                 </span>
             </div>
         );

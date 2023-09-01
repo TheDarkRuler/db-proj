@@ -316,6 +316,11 @@ const deleteSponsor = async (req: Request, res: Response, next: NextFunction) =>
     AppDataSource.manager.getRepository(sponsorizzazioni).delete((await temp).idSponsor);
 };
 
+const insertRightTime = (time: number) => {
+    const result = time.toString().replace(/^.*?\:/, "");
+    return parseInt(time.toString().replace(/\:.*/, ('0' + result).slice(-2)))*100;
+}
+
 const putEvento = async (jTemp: any, idEvento: number, pagEffettuati: number) => {
     let temp = new evento;
     temp.idEvento = idEvento;
@@ -323,8 +328,8 @@ const putEvento = async (jTemp: any, idEvento: number, pagEffettuati: number) =>
     temp.luogo = jTemp.countrie;
     temp.costoNoleggio = parseInt(jTemp.rent);
     temp.spesaStaff = parseInt(jTemp.staff);
-    temp.oraInizio = jTemp.start;
-    temp.oraFine = jTemp.end;
+    temp.oraInizio = insertRightTime(jTemp.start);
+    temp.oraFine = insertRightTime(jTemp.end);
     temp.dataEvento = new Date(jTemp.date);
     temp.sponsor = {
         sponsor1: jTemp.firstSpo,
@@ -456,6 +461,26 @@ const putScontro = async (jTemp: any, idEvento: number) => {
     putStoricoScontri(jTemp, idEvento);
 }
 
+const getEventi = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(evento).find();
+    let eventi = [];
+    (await result).forEach(x => { eventi.push(x.idEvento.toString()) });
+    eventi.forEach(x => {
+        res.append(x)
+    });
+    return res.json(eventi);
+};
+
+const getEventoSingolo = async (req: Request, res: Response, next: NextFunction) => {
+    let result = AppDataSource.manager.getRepository(evento).findOne({
+        where: {
+            idEvento: parseInt(req.params.id.replace(":",""))
+        }
+    })
+
+    return res.json(await result);
+};
+
 const putEventoIIScontri = async (req: Request, res: Response, next: NextFunction) => {
     let idEvento = ((await AppDataSource.manager.getRepository(evento).find()).length);
     let scontroI = JSON.parse(req.params.scontroI.replace(":",""));
@@ -505,6 +530,18 @@ const putEventoVScontri = async (req: Request, res: Response, next: NextFunction
     putScontro(scontroIII, idEvento);
     putScontro(scontroIV, idEvento);
     putScontro(scontroV, idEvento);
+};
+
+const getScontriEvento = async (req: Request, res: Response, next: NextFunction) => {
+    let temp = parseInt(req.params.id.replace(":",""));
+    let result = AppDataSource.manager.getRepository(scontro).find({
+        where: {
+            idEvento: temp,
+        }
+    });
+    let scontri = [];
+    (await result).forEach(x => { scontri.push(JSON.stringify(x)) });
+    return res.json(scontri);
 };
 
 const getPesoPiuma = async (req: Request, res: Response, next: NextFunction) => {
@@ -617,6 +654,7 @@ export default {
     getCategorie, getDiscipline, getRecord,
     getTeams, putTeam, deleteTeam,
     getSponsor, putSponsor, deleteSponsor,
-    putEventoIIScontri, putEventoIIIScontri, putEventoIVScontri, putEventoVScontri, 
+    getEventi, getEventoSingolo, putEventoIIScontri, putEventoIIIScontri, putEventoIVScontri, putEventoVScontri, 
+    getScontriEvento,
     getPesoPiuma, getWelterWeight, getPesoMedio, getPesiMassimi
 };
