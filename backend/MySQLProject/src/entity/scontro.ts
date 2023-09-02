@@ -16,6 +16,21 @@ export class scontro{
     @Column('text')
     categoria: string
 
+    @Column('text')
+    primoPartecipante: string
+
+    @Column('text')
+    secondoPartecipante: string
+
+    @Column('text')
+    vincitore: string
+
+    @Column('text')
+    perdente: string
+
+    @Column('boolean')
+    pareggio: boolean
+
     @Column('numeric')
     pagamentoExtra: number
 

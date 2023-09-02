@@ -457,7 +457,8 @@ CREATE TABLE LOTTATORE (
     dataNascita date NOT NULL,
     peso float NOT NULL,
     id_team integer,
-    PRIMARY KEY (codiceFiscale)
+    PRIMARY KEY (codiceFiscale),
+    CONSTRAINT (id_team) SET NULL ON DELETE
 );
 
 CREATE TABLE TEAM (
@@ -474,20 +475,6 @@ CREATE TABLE RECORD (
     sconfitte integer,
     pareggi integer,
     PRIMARY KEY (codiceFiscale)
-);
-
-CREATE TABLE STORICO_CATEGORIE (
-    codiceFiscale varchar(50) NOT NULL,
-    nome_cat varchar(16) NOT NULL,
-    periodo varchar(32) NOT NULL,
-    PRIMARY KEY (codiceFiscale, nome_cat, periodo)
-);
-
-CREATE TABLE DISCIPLINE (
-    codiceFiscale varchar(50) NOT NULL,
-    nome_disc varchar(16) NOT NULL,
-    periodo varchar(32) NOT NULL,
-    PRIMARY KEY (codiceFiscale, nome_disc, periodo)
 );
 
 CREATE TABLE CLASSIFICA_PIUMA (
@@ -530,10 +517,24 @@ CREATE TABLE DISCIPLINA (
     nome ENUM('BJJ','MMA','MuayThai') PRIMARY KEY
 );
 
+CREATE TABLE STORICO_DISCIPLINE (
+    codiceFiscale varchar(50) NOT NULL,
+    nome_disc varchar(16) NOT NULL,
+    periodo varchar(32) NOT NULL,
+    PRIMARY KEY (codiceFiscale, nome_disc, periodo)
+);
+
 CREATE TABLE CATEGORIA (
     nome ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi') PRIMARY KEY,
     pesoMinimo integer,
     pesiMassimi integer 
+);
+
+CREATE TABLE STORICO_CATEGORIE (
+    codiceFiscale varchar(50) NOT NULL,
+    nome_cat varchar(16) NOT NULL,
+    periodo varchar(32) NOT NULL,
+    PRIMARY KEY (codiceFiscale, nome_cat, periodo)
 );
 
 CREATE TABLE PARTECIPA (
@@ -593,9 +594,16 @@ CREATE TABLE NEWS (
 \subsubsection{Aggiungere lottatore}
 \begin{verbatim}
 INSERT INTO LOTTATORE (nome, cognome, codiceFiscale, 
-    dataNascita, team, peso, categoria, arteMarziale)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+    dataNascita, id_team, peso)
+VALUES (?, ?, ?, ?, ?, ?);
 
+--inserisco inoltre CF, categoria e disciplina negli storici--
+
+INSERT INTO STORICO_CATEGORIE (codiceFiscale, categoria)
+VALUES (?, ?, "ongoing");
+
+INSERT INTO STORICO_DISCIPLINE (codiceFiscale, disciplina)
+VALUES (?, ?, "ongoing");
 -- Aggiungere Record --
 
 INSERT INTO RECORD (idRecord, vittorie, sconfitte, pareggi)
@@ -615,17 +623,25 @@ inserito nella classifica giusta in base al suo peso.}
 \subsubsection{Rimuovere lottatore}
 \begin{verbatim}
 DELETE FROM LOTTATORE
-WHERE codiceFiscale = ?
+WHERE codiceFiscale = ?;
+
+-- Elimina da storico_categoria e storico_disciplina --
+
+DELTE FROM STORICO_DISCIPLINE
+WHERE codiceFiscale = ?;
+
+DELTE FROM STORICO_CATEGORIE
+WHERE codiceFiscale = ?;
 
 -- Elimina il record corrispondente --
 
 DELETE FROM RECORD
-WHERE codiceFiscale = ?
+WHERE codiceFiscale = ?;
 
 -- Elimina l'elemento in classifica
 
 DELETE FROM CLASSIFICA
-WHERE codiceFiscale = ?
+WHERE codiceFiscale = ?;
 \end{verbatim}
 \textsl{P.S: vale la stessa cosa che ho detto prima per l'aggiunta classifica.}
 \subsubsection{Aggiungere team}
@@ -637,6 +653,12 @@ VALUES(?, ?, ?, ?);
 \begin{verbatim}
 DELETE FROM TEAM 
 WHERE idTeam = ?
+
+-- si rimuove l'attributo da tutti i lottatori che fanno 
+parte di questo team --
+UPDATE LOTTATORE
+SET id_evento = NULL
+WHERE id_evento = ?
 \end{verbatim}
 \subsubsection{Aggiungere sponsor}
 \begin{verbatim}
@@ -653,36 +675,24 @@ WHERE idSponsor = ?
 INSERT INTO EVENTO (idEVento, nomeStadio, luogo, costoNoleggio,
     spesaStaff, dataEvento, oraInizio, oraFine, 
     bigliettiStandardVenduti, bigliettiPremiumVenduti, 
-    costoBigliettiStandard, costoBigliettiPremium, sponsor)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
--- Inserire evento in storicoEventi --
-
-INSERT INTO STORICO_EVENTI (idEvento, introiti, spese, 
-    guadagniComplessivi)
-VALUES (?, ?, ?, ?);
+    costoBigliettiStandard, costoBigliettiPremium, sponsor, 
+    introiti, spese)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 -- Aggiungere Scontro (2-5 volte, in base al tipo di evento) --
 
 INSERT INTO SCONTRO (idEvento, idScontro, disciplina, 
-    categoria, pagamentoExtra)
-VALUES (?, ?, ?, ?, ?);
-
--- Inserire Scontro nello storicoScontri --
-
-INSERT INTO STORICO_SCONTRI (idEvento, idScontro, 
-    primoPartecipante, secondoPartecipante, vincitore, 
-    perdente, pareggio)
+    categoria, pagamentoExtra, vincitore, pareggio)
 VALUES (?, ?, ?, ?, ?, ?, ?);
+
 \end{verbatim}
 \subsubsection{Modificare lottatore}
 \begin{verbatim}
 
 UPDATE LOTTATORE 
 SET nome = ?, cognome = ?,
-    dataNascita = ?, team = ?, 
-    peso = ?, categoria = ?, 
-    arteMarziale = ?
+    dataNascita = ?, id_team = ?, 
+    peso = ?
 WHERE codiceFiscale = ?
 
 UPDATE RECORD 

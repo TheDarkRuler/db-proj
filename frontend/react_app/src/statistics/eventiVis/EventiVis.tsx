@@ -42,7 +42,7 @@ export default function EventoVis() {
             let temp: any;
 
             await client.get(`/eventi/:${id}`).then((x) => {
-                setScontriXEvento(x.data);
+                temp = x.data;
             });
             setSelectedCountrie(temp.luogo);
             setSelectedStadiumName(temp.nomeStadio);

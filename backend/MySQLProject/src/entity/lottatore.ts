@@ -16,15 +16,9 @@ export class lottatore {
     @Column('text')
     cognome: string
 
-    @Column('text')
-    categoria: string
-
     @Column('date')
     dataNascita: Date
 
     @Column('numeric')
     peso: number
-
-    @Column('text')
-    arteMarziale: string
 }

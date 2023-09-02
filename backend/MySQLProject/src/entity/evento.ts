@@ -47,4 +47,14 @@ export class evento {
         sponsor2: string
         sponsor3: string
     }
+
+    @Column('numeric')
+    introiti: number
+
+    @Column('numeric')
+    spese: number
+
+    @Column('numeric')
+    guadagniComplessivi: number
+
 }

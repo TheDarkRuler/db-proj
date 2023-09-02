@@ -6,13 +6,15 @@ import { client } from '../common/Getter';
 
 export default function Operations() {
 
-    const [tipo, getTipo] = useState(null);
+    const [tipo, getTipo] = useState("Utente");
     const temp = useLocation().state;
     const username = temp.username;
     const isUtente = temp.utente;
-    client.get(`/utenti/getTipo/:${username}`).then((response) => {
-        getTipo(response.data)
-    });
+    if (isUtente !== true){
+        client.get(`/utenti/getTipo/:${username}`).then((response) => {
+            getTipo(response.data)
+        });
+    }
 
     function ClassificheVis() {
 

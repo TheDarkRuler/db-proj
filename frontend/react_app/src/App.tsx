@@ -74,13 +74,13 @@ const SignIn = () => {
   let navigate = useNavigate();
   const routeChange = () => {
     let path = `Statistics`;
-    navigate(path, { state: {utente: true}, replace: true });
+    navigate(path, { state: {utente: true, username: selectedUsername}, replace: true });
   };
 
   const confirm = () => {
     if (!users.includes(selectedUsername)) {
       client.get(`/utenti/insert/:${selectedUsername}/:${selectedPassword}`);
-      routeChange();
+      routeChange()
     } else {
       toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Utente già presente', life: 3000 });
     }
