@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import background from '../../img/lottatoreBackg.jpg';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
@@ -12,7 +12,7 @@ import ScontriVis from './ScontriVis';
 export default function EventoVis() {
 
     function AddEvento() {
-        const [scontriXEvento, setScontriXEvento] = useState(null);
+        const [scontriXEvento, setScontriXEvento] = useState([]);
         const [date, setDate] = useState(null);
         const [selectedCountrie, setSelectedCountrie] = useState(null);
         const [selectedStadiumName, setSelectedStadiumName] = useState("");
@@ -28,10 +28,6 @@ export default function EventoVis() {
         const [selectedTimeStart, setSelectedTimeStart] = useState(null);
         const [selectedTimeEnd, setSelectedTimeEnd] = useState(null);
 
-        /*const renderListEventi = GetElements("/eventi").map((item) =>
-            <option value={item}>{`Evento N°: ${item}`}</option>
-        );*/
-
         const listEventi = GetElements('/eventi');
 
         const renderListEventi = listEventi.map((item) =>
@@ -44,6 +40,13 @@ export default function EventoVis() {
             await client.get(`/eventi/:${id}`).then((x) => {
                 temp = x.data;
             });
+            const result = client.get(`scontri/eventi/:${id}`);
+            let scontriTemp = [];
+            console.log((await result).data.forEach((x: any) => {
+                scontriTemp.push(JSON.parse(x));
+            }));
+            setScontriXEvento(scontriTemp);
+
             setSelectedCountrie(temp.luogo);
             setSelectedStadiumName(temp.nomeStadio);
             setSelectedRentPrice(temp.costoNoleggio);
@@ -150,7 +153,7 @@ export default function EventoVis() {
                         </div>
                     </div>
                 </div>
-                <>{ScontriVis(scontriXEvento)}</>
+                <>{ScontriVis(scontriXEvento, scontriXEvento.length)}</>
             </>
         );
 

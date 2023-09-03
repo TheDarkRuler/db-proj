@@ -1,9 +1,9 @@
 import './ScontriVis.css';
-import React, { useState } from 'react';
+import React from 'react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { ScheletroScontriVis } from './ScheletroScontriVis';
 
-export default function ScontriVis(scontriXEvento: any) {
+export default function ScontriVis(scontriXEvento: any, lenght: number) {
 
     const InitialScontroVis = () => {
 
@@ -12,7 +12,6 @@ export default function ScontriVis(scontriXEvento: any) {
         const ScontroIII = ScheletroScontriVis;
         const ScontroIV = ScheletroScontriVis;
         const ScontroV = ScheletroScontriVis;
-        console.log(scontriXEvento);
 
         return (
             <div className="listScontriVis">
@@ -22,35 +21,35 @@ export default function ScontriVis(scontriXEvento: any) {
                             <span className="vertical-align-middle">Scontro I</span>
                         </div>
                     }>
-                        <>{ScontroI(1)}</>
+                        <>{scontriXEvento !== undefined? ScontroI(1, scontriXEvento[0]): ""}</>
                     </AccordionTab>
                     <AccordionTab header={
                         <div className="flex align-items-center">
                             <span className="vertical-align-middle">Scontro II</span>
                         </div>
                     }>
-                        <>{ScontroII(2)}</>
+                        <>{scontriXEvento !== undefined? ScontroII(2, scontriXEvento[1]): null}</>
                     </AccordionTab>
-                    <AccordionTab header={
+                    <AccordionTab disabled={lenght < 3} header={
                         <div className="flex align-items-center">
                             <span className="vertical-align-middle">Scontro III</span>
                         </div>
                     }>
-                        <>{ScontroIII(3)}</>
+                        <>{(scontriXEvento === undefined || lenght < 3)? "": ScontroIII(3, scontriXEvento[2])}</>
                     </AccordionTab>
-                    <AccordionTab  header={
+                    <AccordionTab disabled={lenght < 4}  header={
                         <div className="flex align-items-center">
                             <span className="vertical-align-middle">Scontro IV</span>
                         </div>
                     }>
-                        <>{ScontroIV(4)}</>
+                        <>{(scontriXEvento === undefined || lenght < 4)? "": ScontroIV(4, scontriXEvento[3])}</>
                     </AccordionTab>
-                    <AccordionTab header={
+                    <AccordionTab disabled={lenght < 5} header={
                         <div className="flex align-items-center">
                             <span className="vertical-align-middle">Scontro V</span>
                         </div>
                     }>
-                        <>{ScontroV(5)}</>
+                        <>{(scontriXEvento === undefined || lenght < 5)? "": ScontroV(5, scontriXEvento[4])}</>
                     </AccordionTab>
                 </Accordion>
             </div>
