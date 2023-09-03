@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import './App.css';
-import background from './img/mma-background.jpg';
+import background from './img/loginImage.jpg';
 import { useNavigate } from "react-router-dom";
 import "reflect-metadata";
 import { InputText } from 'primereact/inputtext';

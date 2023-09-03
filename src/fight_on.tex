@@ -525,7 +525,8 @@ CREATE TABLE STORICO_DISCIPLINE (
 );
 
 CREATE TABLE CATEGORIA (
-    nome ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi') PRIMARY KEY,
+    nome ENUM('PesoPiuma','Welterweight',
+            'PesoMedio','PesiMassimi') PRIMARY KEY,
     pesoMinimo integer,
     pesiMassimi integer 
 );
@@ -548,7 +549,8 @@ CREATE TABLE SCONTRO (
     idEvento integer NOT NULL,
     idScontro integer NOT NULL,
     disciplina ENUM('BJJ','MMA','MuayThai'),
-    categoria ENUM('PesoPiuma','Welterweight','PesoMedio','PesiMassimi'),
+    categoria ENUM('PesoPiuma','Welterweight',
+                    'PesoMedio','PesiMassimi'),
     pagamentoExtra float,
     PRIMARY KEY (idEvento, idScontro)
 );
@@ -570,8 +572,10 @@ CREATE TABLE EVENTO (
     introiti float,
     spese float,
     PRIMARY KEY (idEvento)
-    CONSTRAINT ORARIO CHECK (oraInizio <= oraFine) => (Rimosso perchè risultava esserci un problema quando gli eventi 
-    finivano dopo mezzanotte)
+    CONSTRAINT ORARIO CHECK (oraInizio <= oraFine) => 
+        (Rimosso perchè risultava esserci un 
+        problema quando gli eventi 
+        finivano dopo mezzanotte)
 );
 
 CREATE TABLE SPONSORIZZAZIONI (
@@ -609,17 +613,8 @@ VALUES (?, ?, "ongoing");
 INSERT INTO RECORD (idRecord, vittorie, sconfitte, pareggi)
 VALUES (?, 0, 0, 0);
 
--- Aggiungere classifica --
-
-INSERT INTO CLASSIFICA (nome, cognome, codiceFiscale, peso, 
-    arteMarziale)
-VALUES (?, ?, ?, ?, ?);
 
 \end{verbatim}
-\textsl{P.S: In questo caso inserisco il lottatore nella tabella 'classifica' che non esiste per comodità, 
-nell'applicazione invece sarà presente un controllo che farà in modo che il partecipante venga 
-inserito nella classifica giusta in base al suo peso.}
-
 \subsubsection{Rimuovere lottatore}
 \begin{verbatim}
 DELETE FROM LOTTATORE
@@ -638,12 +633,7 @@ WHERE codiceFiscale = ?;
 DELETE FROM RECORD
 WHERE codiceFiscale = ?;
 
--- Elimina l'elemento in classifica
-
-DELETE FROM CLASSIFICA
-WHERE codiceFiscale = ?;
 \end{verbatim}
-\textsl{P.S: vale la stessa cosa che ho detto prima per l'aggiunta classifica.}
 \subsubsection{Aggiungere team}
 \begin{verbatim}
 INSERT INTO TEAM (idTeam, nome, nome_responsabile, origine)
@@ -670,14 +660,35 @@ VALUES (?, ?, ?);
 DELETE FROM SPONSORIZZAZIONI
 WHERE idSponsor = ?
 \end{verbatim}
+\subsubsection{Scrivere news}
+\begin{verbatim}
+INSERT INTO UTENTE(idNews, argomento, descrizione, scrittore)
+VALUES (?, ?, ?, ?);
+\end{verbatim}
+\subsubsection{Rimuovere news}
+\begin{verbatim}
+DELETE FROM NEWS
+WHERE id_news = ?
+\end{verbatim}
+\subsubsection{Aggiungere Pubblicitario/Utente}
+\begin{verbatim}
+INSERT INTO UTENTE(username, passw, tipo)
+VALUES (?, ?, ?);
+\end{verbatim}
+\subsubsection{Rimuovere pubblicitario}
+\begin{verbatim}
+DELETE FROM UTENTE
+WHERE Username = ?
+\end{verbatim}
 \subsubsection{Registrare evento}
 \begin{verbatim}
 INSERT INTO EVENTO (idEVento, nomeStadio, luogo, costoNoleggio,
     spesaStaff, dataEvento, oraInizio, oraFine, 
     bigliettiStandardVenduti, bigliettiPremiumVenduti, 
     costoBigliettiStandard, costoBigliettiPremium, sponsor, 
-    introiti, spese)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    introiti, spese, guadagnoComplessivo)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+        ?, ?, ?, introiti - spese);
 
 -- Aggiungere Scontro (2-5 volte, in base al tipo di evento) --
 
@@ -695,6 +706,36 @@ SET nome = ?, cognome = ?,
     peso = ?
 WHERE codiceFiscale = ?
 
+-- controllo se la riga che voglio inserire esiste già, 
+e se sì, lascio tutto così come è altrimenti modifico 
+questa impostando la data di oggi nel campo periodo e 
+inserisco una nuova riga con la nuova disciplina voluta 
+e stato "ongoing" --
+
+INSERT INTO STORICO_DISCIPLINE 
+    (codiceFiscale, nome_disc, periodo)
+VALUES (?, ?, "ongoing")
+ON DUPLICATE KEY UPDATE
+    periodo = IF(nome_disc <> ?, ?, periodo);
+
+UPDATE STORICO_DISCIPLINE
+SET periodo = ?
+WHERE codiceFiscale = ? AND nome_disc <> ?;
+
+-- eseguo la stessa cosa per le categorie --
+
+INSERT INTO STORICO_CATEGORIE   
+    (codiceFiscale, nome_cat, periodo)
+VALUES (?, ?, "ongoing")
+ON DUPLICATE KEY UPDATE
+    periodo = IF(nome_cat <> ?, ?, periodo);
+
+UPDATE STORICO_CATEGORIE
+SET periodo = ?
+WHERE codiceFiscale = ? AND nome_cat <> ?;
+
+-- aggiorno il record se necessario --
+
 UPDATE RECORD 
 SET vittore = ?,
     sconfitte = ?,
@@ -702,13 +743,35 @@ SET vittore = ?,
 WHERE codiceFiscale = ?
     
 \end{verbatim}
+\subsubsection{Visualizzare news}
+\begin{verbatim}
+SELECT *
+FROM NEWS
+\end{verbatim}
+\subsubsection{Visualizzare lottatore}
+\begin{verbatim}
+SELECT *
+FROM LOTTATORE l
+LEFT JOIN STORICO_CATEGORIE sc ON 
+    l.codiceFiscale = sc.codiceFiscale
+LEFT JOIN STORICO_DISCIPLINE sd ON 
+    l.codiceFiscale = sd.codiceFiscale
+ORDER BY l.codiceFiscale;    
+\end{verbatim}
+\subsubsection{Visualizzare eventi}
+\begin{verbatim}
+SELECT *
+FROM EVENTO e
+LEFT JOIN SCONTRO s ON e.idEvento = s.idEvento
+ORDER BY e.idEvento, s.idScontro;
+\end{verbatim}
 \subsubsection{Visualizzare classifiche}
 \begin{verbatim}
-SELECT c.codicFiscale
-FROM CLASSIFICA c
-JOIN RECORD r ON c.codiceFiscale = r.codiceFiscale
-ORDER BY (r.vittoria * 3 + r.pareggio) DESC;
-    
+SELECT *
+FROM LOTTATORE l
+INNER JOIN STORICO_DISCIPLINE s
+    ON l.codiceFiscale = s.codiceFiscale
+    WHERE s.periodo = "ongoing" AND s.nome_disc = ?;
 \end{verbatim}
 
 \chapter{Progettazione dell'applicazione}
@@ -722,13 +785,23 @@ evitando una connessione diretta tramite codice. Questo design permette all'appl
 eventuali dipendenze tra frontend e backend. Inoltre, per la gestione del database da parte del backend, si utilizza la libreria 
 \emph{TypeORM} di \textrm{Typescript}. Libreria che permette di eseguire operazioni sui dati mediante codice.
 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{./img/login.png}
+    \caption{\textit{log in/sign in}}
+    \medskip
+    Da questa pagina (iniziale) è possibile accedere in 3 diverse maniere (amministratore, pubblicitario, utente), ognuna
+    di queste darà accesso a diverse operazioni cambiando anche le interfacce.
+\end{figure}
+
 \begin{figure}
     \centering
     \includegraphics[scale=0.3]{./img/menù_iniziale.png}
     \caption{\textit{Menù iniziale dell'applicazione}}
     \medskip
-    In questo menù sarà possibile accedere alle operazioni di gestione del database(es: \ref{addEvento} per la registrazione di un evento) 
-    oppure alle classifiche generali dei lottatori \ref{categoria}.
+    In questo menù accessibile solo dall'amministratore sarà possibile accedere alle operazioni di gestione del 
+    database(es: \ref{addEvento} per la registrazione di un evento) oppure alle classifiche generali dei lottatori \ref{categoria}.
 \end{figure}
 
 \begin{figure}
