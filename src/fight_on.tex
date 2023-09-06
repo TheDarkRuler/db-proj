@@ -457,6 +457,9 @@ CREATE TABLE LOTTATORE (
     dataNascita date NOT NULL,
     peso float NOT NULL,
     id_team integer,
+    vittorie number NOT NULL,
+    sconfitte number NOT NULL,
+    pareggi number NOT NULL,
     PRIMARY KEY (codiceFiscale),
     CONSTRAINT (id_team) SET NULL ON DELETE
 );
@@ -469,50 +472,6 @@ CREATE TABLE TEAM (
     PRIMARY KEY (idTeam)
 );
 
-CREATE TABLE RECORD (
-    codiceFiscale varchar(50) NOT NULL,
-    vittorie integer,
-    sconfitte integer,
-    pareggi integer,
-    PRIMARY KEY (codiceFiscale)
-);
-
-CREATE TABLE CLASSIFICA_PIUMA (
-    codiceFiscale varchar(50) NOT NULL,
-    nome varchar(20) NOT NULL,
-    cognome varchar(30) NOT NULL,
-    peso float NOT NULL,
-    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
-    PRIMARY KEY (codiceFiscale)
-);
-
-CREATE TABLE CLASSIFICA_WELTERWEIGHT (
-    codiceFiscale varchar(50) NOT NULL,
-    nome varchar(20) NOT NULL,
-    cognome varchar(30) NOT NULL,
-    peso float NOT NULL,
-    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
-    PRIMARY KEY (codiceFiscale)
-);
-
-CREATE TABLE CLASSIFICA_MEDIO (
-    codiceFiscale varchar(50) NOT NULL,
-    nome varchar(20) NOT NULL,
-    cognome varchar(30) NOT NULL,
-    peso float NOT NULL,
-    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
-    PRIMARY KEY (codiceFiscale)
-);
-
-CREATE TABLE CLASSIFICA_MASSIMI (
-    codiceFiscale varchar(50) NOT NULL,
-    nome varchar(20) NOT NULL,
-    cognome varchar(30) NOT NULL,
-    peso float NOT NULL,
-    arteMarziale ENUM('BJJ', 'MMA', 'MuayThai') NOT NULL,
-    PRIMARY KEY (codiceFiscale)
-);
-
 CREATE TABLE DISCIPLINA (
     nome ENUM('BJJ','MMA','MuayThai') PRIMARY KEY
 );
@@ -521,7 +480,7 @@ CREATE TABLE STORICO_DISCIPLINE (
     codiceFiscale varchar(50) NOT NULL,
     nome_disc varchar(16) NOT NULL,
     periodo varchar(32) NOT NULL,
-    PRIMARY KEY (codiceFiscale, nome_disc, periodo)
+    PRIMARY KEY (codiceFiscale, periodo)
 );
 
 CREATE TABLE CATEGORIA (
@@ -535,7 +494,7 @@ CREATE TABLE STORICO_CATEGORIE (
     codiceFiscale varchar(50) NOT NULL,
     nome_cat varchar(16) NOT NULL,
     periodo varchar(32) NOT NULL,
-    PRIMARY KEY (codiceFiscale, nome_cat, periodo)
+    PRIMARY KEY (codiceFiscale, periodo)
 );
 
 CREATE TABLE PARTECIPA (
@@ -598,8 +557,8 @@ CREATE TABLE NEWS (
 \subsubsection{Aggiungere lottatore}
 \begin{verbatim}
 INSERT INTO LOTTATORE (nome, cognome, codiceFiscale, 
-    dataNascita, id_team, peso)
-VALUES (?, ?, ?, ?, ?, ?);
+    dataNascita, id_team, peso, vittorie, sconfitte, pareggi)
+VALUES (?, ?, ?, ?, ?, ?, 0, 0, 0);
 
 --inserisco inoltre CF, categoria e disciplina negli storici--
 
@@ -608,10 +567,6 @@ VALUES (?, ?, "ongoing");
 
 INSERT INTO STORICO_DISCIPLINE (codiceFiscale, disciplina)
 VALUES (?, ?, "ongoing");
--- Aggiungere Record --
-
-INSERT INTO RECORD (idRecord, vittorie, sconfitte, pareggi)
-VALUES (?, 0, 0, 0);
 
 
 \end{verbatim}
@@ -626,11 +581,6 @@ DELTE FROM STORICO_DISCIPLINE
 WHERE codiceFiscale = ?;
 
 DELTE FROM STORICO_CATEGORIE
-WHERE codiceFiscale = ?;
-
--- Elimina il record corrispondente --
-
-DELETE FROM RECORD
 WHERE codiceFiscale = ?;
 
 \end{verbatim}
@@ -703,7 +653,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?);
 UPDATE LOTTATORE 
 SET nome = ?, cognome = ?,
     dataNascita = ?, id_team = ?, 
-    peso = ?
+    peso = ?, vittorie = ?, sconfitte = ?,
+    pareggi = ?
 WHERE codiceFiscale = ?
 
 -- controllo se la riga che voglio inserire esiste già, 
@@ -712,35 +663,37 @@ questa impostando la data di oggi nel campo periodo e
 inserisco una nuova riga con la nuova disciplina voluta 
 e stato "ongoing" --
 
-INSERT INTO STORICO_DISCIPLINE 
-    (codiceFiscale, nome_disc, periodo)
-VALUES (?, ?, "ongoing")
-ON DUPLICATE KEY UPDATE
-    periodo = IF(nome_disc <> ?, ?, periodo);
-
 UPDATE STORICO_DISCIPLINE
 SET periodo = ?
-WHERE codiceFiscale = ? AND nome_disc <> ?;
+WHERE codiceFiscale = ? 
+    AND periodo = 'ongoing' AND nome_disc <> ?;
+
+INSERT INTO STORICO_DISCIPLINE 
+    (codiceFiscale, nome_disc, periodo)
+SELECT ?, ?, 'ongoing'
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM STORICO_DISCIPLINE
+    WHERE codiceFiscale = ?
+        AND periodo = 'ongoing' AND nome_disc <> ?
+);
 
 -- eseguo la stessa cosa per le categorie --
 
-INSERT INTO STORICO_CATEGORIE   
-    (codiceFiscale, nome_cat, periodo)
-VALUES (?, ?, "ongoing")
-ON DUPLICATE KEY UPDATE
-    periodo = IF(nome_cat <> ?, ?, periodo);
-
 UPDATE STORICO_CATEGORIE
 SET periodo = ?
-WHERE codiceFiscale = ? AND nome_cat <> ?;
+WHERE codiceFiscale = ? 
+    AND periodo = 'ongoing' AND nome_disc <> ?;
 
--- aggiorno il record se necessario --
-
-UPDATE RECORD 
-SET vittore = ?,
-    sconfitte = ?,
-    pareggi = ?
-WHERE codiceFiscale = ?
+INSERT INTO STORICO_CATEGORIE 
+    (codiceFiscale, nome_disc, periodo)
+SELECT ?, ?, 'ongoing'
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM STORICO_CATEGORIE
+    WHERE codiceFiscale = ?
+        AND periodo = 'ongoing' AND nome_disc <> ?
+);
     
 \end{verbatim}
 \subsubsection{Visualizzare news}
