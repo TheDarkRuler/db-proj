@@ -1,40 +1,62 @@
 import express = require('express');
-import controller from '../controllers/controller';
+import createController from '../controllers/createController';
+import readController from '../controllers/readController';
+import updateController from '../controllers/updateController';
+import deleteController from '../controllers/deleteController';
 const router = express.Router();
 
-router.get('/utenti', controller.getUtenti);
-router.get('/utenti/getTipo/:username', controller.getUtenteTipo);
-router.get('/utenti/insert/:username/:password', controller.putUtente);
-router.get('/pubblicitari', controller.getPubblicitari);
-router.get('/pubblicitari/rimuovi/:username', controller.removePubblicitari);
-router.get('/pubblicitari/aggiungi/:username/:password', controller.putPubblicitari);
-router.get('/news', controller.getNews);
-router.get('/news/rimuovi/:id', controller.removeNews);
-router.get('/news/aggiungi/:argomento/:descrizione/:username', controller.putNews);
-router.get('/lottatore', controller.getLottatori);
-router.get('/lottatore/complete', controller.getFiltedLottatori);
-router.get('/lottatore/aggiungi/:nome/:cognome/:cf/:nascita/:peso/:team/:disciplina', controller.putLottatore);
-router.get('/lottatore/modifica/:tempLottatore/:tempRecord', controller.editLottatore);
-router.get('/lottatore/rimuovi/:cf', controller.deleteLottatore);
-router.get('/record/:cf', controller.getRecord);
-router.get('/categoria', controller.getCategorie);
-router.get('/disciplina', controller.getDiscipline);
-router.get('/team', controller.getTeams);
-router.get('/team/aggiungi/:TeamName/:CeoName/:Countrie', controller.putTeam);
-router.get('/team/rimuovi/:id', controller.deleteTeam);
-router.get('/sponsor', controller.getSponsor);
-router.get('/sponsor/aggiungi/:nome/:pagamento', controller.putSponsor);
-router.get('/sponsor/rimuovi/:id', controller.deleteSponsor);
-router.get('/eventi', controller.getEventi);
-router.get('/eventi/:id', controller.getEventoSingolo);
-router.get('/evento/aggiungi/:evento/:scontroI/:scontroII', controller.putEventoIIScontri);
-router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII', controller.putEventoIIIScontri);
-router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroIV', controller.putEventoIVScontri);
-router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroVI/:scontroV', controller.putEventoVScontri);
-router.get('/scontri/eventi/:id', controller.getScontriEvento);
-router.get('/pesoPiuma', controller.getPesoPiuma);
-router.get('/welterWeight', controller.getWelterWeight);
-router.get('/pesoMedio', controller.getPesoMedio);
-router.get('/pesiMassimi', controller.getPesiMassimi);
+/**
+ *  -- Create Records --
+ */
+
+router.get('/utenti/insert/:username/:password', createController.putUtente);
+router.get('/pubblicitari/aggiungi/:username/:password', createController.putPubblicitari);
+router.get('/news/aggiungi/:argomento/:descrizione/:username', createController.putNews);
+router.get('/lottatore/aggiungi/:nome/:cognome/:cf/:nascita/:peso/:team/:disciplina', createController.putLottatore);
+router.get('/team/aggiungi/:TeamName/:CeoName/:Countrie', createController.putTeam);
+router.get('/sponsor/aggiungi/:nome/:pagamento', createController.putSponsor);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII', createController.putEventoIIScontri);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII', createController.putEventoIIIScontri);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroIV', createController.putEventoIVScontri);
+router.get('/evento/aggiungi/:evento/:scontroI/:scontroII/:scontroIII/:scontroVI/:scontroV', createController.putEventoVScontri);
+
+/**
+ * -- Get Records
+ */
+
+router.get('/utenti', readController.getUtenti);
+router.get('/utenti/getTipo/:username', readController.getUtenteTipo);
+router.get('/news', readController.getNews);
+router.get('/pubblicitari', readController.getPubblicitari);
+router.get('/lottatore', readController.getLottatori);
+router.get('/lottatore/complete', readController.getFiltedLottatori);
+router.get('/record/:cf', readController.getRecord);
+router.get('/categoria', readController.getCategorie);
+router.get('/disciplina', readController.getDiscipline);
+router.get('/team', readController.getTeams);
+router.get('/sponsor', readController.getSponsor);
+router.get('/eventi', readController.getEventi);
+router.get('/eventi/:id', readController.getEventoSingolo);
+router.get('/scontri/eventi/:id', readController.getScontriEvento);
+router.get('/pesoPiuma', readController.getPesoPiuma);
+router.get('/welterWeight', readController.getWelterWeight);
+router.get('/pesoMedio', readController.getPesoMedio);
+router.get('/pesiMassimi', readController.getPesiMassimi);
+
+/**
+ * -- Update Records --
+ */
+
+router.get('/lottatore/modifica/:tempLottatore/:tempRecord', updateController.updateLottatore);
+
+/**
+ * -- Delete Records --
+ */
+
+router.get('/pubblicitari/rimuovi/:username', deleteController.deletePubblicitari);
+router.get('/news/rimuovi/:id', deleteController.deleteNews);
+router.get('/lottatore/rimuovi/:cf', deleteController.deleteLottatore);
+router.get('/team/rimuovi/:id', deleteController.deleteTeam);
+router.get('/sponsor/rimuovi/:id', deleteController.deleteSponsor);
 
 export = router;
