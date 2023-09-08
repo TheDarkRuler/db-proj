@@ -111,7 +111,7 @@ Gli scontri constituiscono gli eventi e sono formati da due lottatori della stes
 a uno scontro ricevano un pagamento in base alle volontà dell'amministratore.
 
 \section{Schema concettuale finale}
-\includegraphics[scale=0.7, angle=90]{./img/schema_finale.png}
+\includegraphics[scale=0.65, angle=90]{./img/schema_finale.png}
 
 \chapter{Progettazione logica}
 \section{Stima del volume dei dati}
@@ -356,7 +356,7 @@ L'attributo record presente nell'entità lottatore potrebbe essere ricavato attr
 e pareggi effettuati da un lottatore attraverso l'entità scontro durante la creazione delle classifiche.
 \subsubsection{Caso senza ridondanza}
 \begin{table}[H]
-    \paragraph{Tavola degli accessi\newline}
+    \paragraph{Tavola degli accessi creazione classifiche\newline}
     \begin{tabular}{|c|c|c|c|}
     \hline
     Concetto                           & Costrutto & Accessi & Tipo \\ \hline
@@ -368,11 +368,27 @@ e pareggi effettuati da un lottatore attraverso l'entità scontro durante la cre
     \textit{TOTALE}                    &           & 4750    &      \\ \hline
     \end{tabular}
 \end{table}
+
+\begin{table}[H]
+    \paragraph{Tavola degli accessi visualizzazione lottatori\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto                           & Costrutto & Accessi & Tipo \\ \hline
+    LOTTATORE                          & E         & 250     & L    \\ \hline
+    SCONTRO                            & E         & 2000    & L    \\ \hline
+    STORICO\textunderscore DISCIPLINE  & E         & 250     & L    \\ \hline
+    STORICO\textunderscore CATEGORIE   & E         & 250     & L    \\ \hline
+    partecipa                          & A         & 2000    & L    \\ \hline
+    pratica                            & A         & 250     & L    \\ \hline
+    appartiene                         & A         & 250     & L    \\ \hline
+    \textit{TOTALE}                    &           & 5250    &      \\ \hline
+    \end{tabular}
+\end{table}
 \begin{equation}
-    \frac{50}{g} \times 4750R = 237500 \frac{R}{g}
+    \frac{80}{g} \times 10000R = 800000 \frac{R}{g}
 \end{equation}
 
-\subsubsection{Caso con ridondanza}
+\subsubsection{Caso con ridondanza creazione classifiche}
 \begin{table}[H]
     \paragraph{Tavola degli accessi\newline}
     \begin{tabular}{|c|c|c|c|}
@@ -384,8 +400,22 @@ e pareggi effettuati da un lottatore attraverso l'entità scontro durante la cre
     \textit{TOTALE}                    &           & 750     &      \\ \hline
     \end{tabular}
 \end{table}
+
+\begin{table}[H]
+    \paragraph{Tavola degli accessi visualizzazione lottatori\newline}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Concetto                           & Costrutto & Accessi & Tipo \\ \hline
+    LOTTATORE                          & E         & 250     & L    \\ \hline
+    STORICO\textunderscore DISCIPLINE  & E         & 250     & L    \\ \hline
+    STORICO\textunderscore CATEGORIE   & E         & 250     & L    \\ \hline
+    pratica                            & A         & 250     & L    \\ \hline
+    appartiene                         & A         & 250     & L    \\ \hline
+    \textit{TOTALE}                    &           & 1250    &      \\ \hline
+    \end{tabular}
+\end{table}
 \begin{equation}
-    \frac{50}{g} \times 250R = 12500 \frac{R}{g}
+    \frac{80}{g} \times 2000R = 160000 \frac{R}{g}
 \end{equation}
 Concludo quindi che devo preservare la ridondanza.
 
@@ -399,12 +429,6 @@ Team(\underline{id\textunderscore team}, nome, nome\textunderscore responsabile,
 $\\$
 Utente(\underline{Username}, pubblicitario*, amministratore*) $\\$
 $\\$
-Pubblicitario(\underline{Username}) $\\$
-fk: Username references Utente $\\$
-$\\$
-Amministratore(\underline{Username}) $\\$
-fk: Username references Utente $\\$
-$\\$
 News(\underline{id\textunderscore news}, argomento, descrizione, Username) $\\$
 fk: Username references Pubblicitario $\\$
 $\\$
@@ -412,11 +436,12 @@ Sponsorizzazioni(\underline{id\textunderscore sponsor}, nome, pagamento\textunde
 $\\$
 Evento(\underline{id\textunderscore evento}, nome\textunderscore stadio, 
 luogo, costo\textunderscore noleggio, spesa\textunderscore staff, data, ora\textunderscore inizio, ora\textunderscore fine, 
-sponsor*, introiti, spese, biglietti\textunderscore standard\textunderscore venduti, biglietti\textunderscore premium\textunderscore venduti, 
+sponsor1*, sponsor2*, sponsor3*, introiti, spese, biglietti\textunderscore standard\textunderscore venduti, 
+biglietti\textunderscore premium\textunderscore venduti, 
 costo\textunderscore biglietti\textunderscore standard, costo\textunderscore biglietti\textunderscore premium) $\\$
 fk: sponsor references Sponsorizzazioni $\\$
 $\\$
-Scontro(\underline{id\textunderscore scontro, id\textunderscore evento}, disciplina, categoria, pagamento\textunderscore extra) $\\$
+Scontro(\underline{id\textunderscore scontro, id\textunderscore evento}, pareggio, disciplina, categoria, pagamento\textunderscore extra) $\\$
 fk: id\textunderscore evento references Evento $\\$
 fk: categoria references Categoria $\\$
 fk: disciplina references Disciplina $\\$
@@ -427,18 +452,18 @@ fk: codice\textunderscore fiscale references Lottatore $\\$
 $\\$
 Categoria(\underline{nome}, peso\textunderscore minimo, peso\textunderscore massimo) $\\$
 $\\$
-Storico\textunderscore Categorie(\underline{codice\textunderscore fiscale, nome\textunderscore cat, periodo}) $\\$
+Storico\textunderscore Categorie(\underline{codice\textunderscore fiscale, periodo}, nome\textunderscore cat) $\\$
 fk: codice\textunderscore fiscale references Lottatore $\\$
 fk: nome\textunderscore cat references Categoria $\\$
 $\\$
 Disciplina(\underline{nome}) $\\$
 $\\$
-Storico\textunderscore Discipline(\underline{codice\textunderscore fiscale, nome\textunderscore disc, periodo}) $\\$
+Storico\textunderscore Discipline(\underline{codice\textunderscore fiscale, periodo}, nome\textunderscore disc) $\\$
 fk: codice\textunderscore fiscale references Lottatore $\\$
 fk: nome\textunderscore disc references Disciplina $\\$
 
 \section{Schema relazionale finale}
-\includegraphics[scale=0.7, angle=90]{./img/schema_rel_finale.png}
+\includegraphics[scale=0.65, angle=90]{./img/schema_rel_finale.png}
 
 \section{Traduzione operazioni in query SQL}
 \subsection{Creazione tabelle}
@@ -498,10 +523,11 @@ CREATE TABLE STORICO_CATEGORIE (
 );
 
 CREATE TABLE PARTECIPA (
-    codiceFiscale varchar(50),
-    idScontro integer,
+    codiceFiscale varchar(50) NOT NULL,
+    idScontro integer NOT NULL,
+    idEvento integer NOT NULL,
     vincitore varchar(50),
-    PRIMARY KEY (codiceFiscale, idScontro)
+    PRIMARY KEY (codiceFiscale, idScontro, idEVento)
 );
 
 CREATE TABLE SCONTRO (
@@ -511,6 +537,7 @@ CREATE TABLE SCONTRO (
     categoria ENUM('PesoPiuma','Welterweight',
                     'PesoMedio','PesiMassimi'),
     pagamentoExtra float,
+    pareggio bool,
     PRIMARY KEY (idEvento, idScontro)
 );
 
@@ -597,8 +624,8 @@ WHERE idTeam = ?
 -- si rimuove l'attributo da tutti i lottatori che fanno 
 parte di questo team --
 UPDATE LOTTATORE
-SET id_evento = NULL
-WHERE id_evento = ?
+SET id_team= NULL
+WHERE id_team = ?
 \end{verbatim}
 \subsubsection{Aggiungere sponsor}
 \begin{verbatim}
@@ -643,8 +670,16 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
 -- Aggiungere Scontro (2-5 volte, in base al tipo di evento) --
 
 INSERT INTO SCONTRO (idEvento, idScontro, disciplina, 
-    categoria, pagamentoExtra, vincitore, pareggio)
-VALUES (?, ?, ?, ?, ?, ?, ?);
+    categoria, pagamentoExtra, pareggio)
+VALUES (?, ?, ?, ?, ?, ?);
+
+INSERT INTO PARTECIPA (id_evnto, codice_fiscale, id_scontro, 
+    vincitore)
+VALUES (?, ?, ?, ?)
+
+UPDATE LOTTATORE
+SET vittorie = ?, sconfitte = ?, pareggi = ?
+WHERE codiceFiscale = ?
 
 \end{verbatim}
 \subsubsection{Modificare lottatore}
